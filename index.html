@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>דפי פעילות</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Rubik:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* layout idea: a quiet trail down the middle of a cream page; white cards with hairlines; one green action per screen */
+:root{
+  --bg:#FDFBF7;
+  --card:#FFFFFF;
+  --line:#E6E0D4;
+  --ink:#2A2F2E;
+  --muted:#6E716C;
+  --brand:#3C7A71;
+  --brand-soft:#E3EEEB;
+  --warm:#F3EBDD;
+  --accent:#E9A23B;
+  --rose:#E07A6A;
+  --font-display:"Rubik",system-ui,"Segoe UI",Arial,sans-serif;
+  --font-body:"Heebo",system-ui,"Segoe UI",Arial,sans-serif;
+  --r:18px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.55}
+body{min-height:100%}
+h1,h2,h3{font-family:var(--font-display);font-weight:600;margin:0;text-wrap:balance;line-height:1.25}
+h1{font-size:1.9rem}
+h2{font-size:1.4rem}
+h3{font-size:1.1rem}
+p{margin:0}
+a{color:var(--brand)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:10px}
+.wrap{max-width:880px;margin:0 auto;padding:16px 18px 48px}
+.narrow{max-width:640px}
+
+/* top bar */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;max-width:880px;margin:0 auto}
+.brandmark{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brandmark b{font-family:var(--font-display);font-size:1.15rem;font-weight:600}
+.who{display:flex;align-items:center;gap:8px;font-size:.95rem}
+.who .av{width:38px;height:38px;border-radius:50%;background:var(--warm);display:grid;place-items:center;font-size:1.3rem;border:1px solid var(--line)}
+.linkbtn{background:none;border:none;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:4px 6px;font-size:.9rem}
+.back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;color:var(--brand);cursor:pointer;font-weight:500;padding:6px 0;text-decoration:none}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);padding:11px 20px;cursor:pointer;font-weight:500;text-decoration:none;color:var(--ink);transition:transform .12s ease,background .15s}
+.btn:hover{background:#FAF7F1}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff;font-family:var(--font-display);font-size:1.1rem;padding:14px 30px}
+.btn.primary:hover{background:#346B63}
+.btn.primary[disabled]{opacity:.45;cursor:default}
+.btn.small{padding:8px 14px;font-size:.92rem}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.row.center{justify-content:center}
+.stack{display:flex;flex-direction:column;gap:14px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.muted{color:var(--muted)}
+.small{font-size:.9rem}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:8px 14px;cursor:pointer;font-size:.97rem;display:inline-flex;gap:6px;align-items:center}
+.chip[aria-pressed="true"]{border-color:var(--brand);background:var(--brand-soft);color:#24524B;font-weight:500}
+
+/* welcome */
+.welcome{max-width:560px;margin:28px auto;padding:0 18px}
+.avatars{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.avatar{aspect-ratio:1;border-radius:50%;border:2px solid var(--line);background:var(--card);font-size:2.1rem;cursor:pointer;display:grid;place-items:center}
+.avatar[aria-pressed="true"]{border-color:var(--brand);background:var(--brand-soft)}
+.field{width:100%;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;font:inherit;background:var(--card);color:var(--ink)}
+.field:focus{border-color:var(--brand);outline:none}
+label.lbl{font-family:var(--font-display);font-weight:500;display:block;margin-bottom:8px}
+
+/* path */
+.hello{text-align:center;padding:8px 0 4px}
+.hello p{color:var(--muted)}
+.trail{position:relative;margin:10px auto 0;max-width:560px}
+.trail svg.road{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.station{position:relative;display:flex;width:56%;flex-direction:column;align-items:center;text-decoration:none;color:var(--ink);padding:14px 0;cursor:pointer;background:none;border:none}
+.station.right{margin-inline-start:0}
+.station.left{margin-inline-start:44%}
+.station .art{width:150px;height:150px;border-radius:50%;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;box-shadow:0 6px 0 var(--warm);transition:transform .2s ease}
+.station:hover .art{transform:translateY(-3px) rotate(-2deg)}
+.station .num{position:absolute;top:14px;inset-inline-start:calc(50% - 82px);width:34px;height:34px;border-radius:50%;background:var(--brand);color:#fff;font-family:var(--font-display);font-weight:600;display:grid;place-items:center;font-size:1.05rem}
+.station .word{font-family:var(--font-display);font-size:1.2rem;margin-top:12px;font-weight:500}
+.station .ext{font-size:.78rem;color:var(--muted)}
+.station.star .art{border-color:#CFE0DC;box-shadow:0 6px 0 var(--brand-soft)}
+
+.mine{margin-top:34px}
+.mine h3{margin-bottom:10px}
+.mineRow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.mineItem{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;text-decoration:none;color:var(--ink);font-size:.9rem;overflow:hidden}
+.mineItem .e{font-size:1.7rem;display:block}
+.mineItem span.t{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.footer{margin-top:34px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+.copy{font-size:.82rem;color:var(--muted)}
+
+/* create */
+.steps{display:flex;gap:8px;margin:12px 0 18px}
+.steps span{flex:1;height:6px;border-radius:6px;background:var(--line)}
+.steps span.on{background:var(--brand)}
+.types{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.typeCard{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px 10px;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px}
+.typeCard[aria-pressed="true"]{border-color:var(--brand);background:var(--brand-soft)}
+.typeCard svg{width:64px;height:64px}
+.typeCard b{font-family:var(--font-display);font-weight:500}
+.typeCard small{color:var(--muted);font-size:.82rem;line-height:1.3}
+.levels{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.lvl{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px 6px;cursor:pointer;text-align:center}
+.lvl b{display:block;font-family:var(--font-display);font-weight:500}
+.lvl small{color:var(--muted)}
+.lvl[aria-pressed="true"]{border-color:var(--brand);background:var(--brand-soft)}
+.actions{display:flex;justify-content:space-between;gap:10px;margin-top:22px;align-items:center}
+
+.loading{text-align:center;padding:60px 10px}
+.loading .pencil{width:120px;height:120px;margin:0 auto 18px}
+.loading p{font-family:var(--font-display);font-size:1.3rem;min-height:2.2em}
+@keyframes wob{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg) translateY(-4px)}}
+.pencil g.p{transform-origin:60px 60px;animation:wob 1.4s ease-in-out infinite}
+@keyframes draw{to{stroke-dashoffset:0}}
+.pencil path.d{stroke-dasharray:220;stroke-dashoffset:220;animation:draw 2.4s ease-in-out infinite alternate}
+
+/* activity */
+.actHead{display:flex;align-items:center;gap:12px;margin:6px 0 14px}
+.actHead .e{font-size:2.2rem}
+.preview{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:flex;justify-content:center}
+.preview svg{width:100%;max-width:440px;height:auto}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
+.play{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px;position:relative}
+.stage{width:100%;max-width:560px;margin:0 auto;position:relative;touch-action:none}
+.stage svg,.stage canvas{display:block;width:100%;height:auto}
+.progress{height:8px;border-radius:8px;background:var(--warm);overflow:hidden;margin:6px auto 10px;max-width:560px}
+.progress i{display:block;height:100%;background:var(--brand);width:0;transition:width .3s}
+.note{text-align:center;color:var(--muted);min-height:1.6em;margin-top:8px}
+
+.dot{cursor:pointer}
+@keyframes pulse{0%,100%{r:11}50%{r:20}}
+.dot.hint circle.c{animation:pulse 1s ease-in-out 3;fill:var(--accent)}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.shake{animation:shake .3s}
+
+/* paint */
+.paintLayout{display:grid;grid-template-columns:1fr;gap:12px}
+.canvasBox{position:relative;width:100%;max-width:560px;margin:0 auto;aspect-ratio:1;border-radius:12px;overflow:hidden;background:#fff;border:1px solid var(--line);touch-action:none}
+.canvasBox canvas{position:absolute;inset:0;width:100%;height:100%}
+.palette{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.sw{width:36px;height:36px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1.5px var(--line);cursor:pointer}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 3px var(--ink)}
+.tools{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.tool[aria-pressed="true"]{background:var(--brand-soft);border-color:var(--brand)}
+
+/* maze */
+.dpad{display:grid;grid-template-columns:repeat(3,60px);grid-template-rows:repeat(2,52px);gap:6px;justify-content:center;margin-top:12px}
+.dpad button{border-radius:14px;border:1.5px solid var(--line);background:var(--card);font-size:1.4rem;cursor:pointer}
+.dpad .up{grid-column:2;grid-row:1}
+.dpad .l{grid-column:3;grid-row:2}
+.dpad .dn{grid-column:2;grid-row:2}
+.dpad .r{grid-column:1;grid-row:2}
+
+/* grid copy */
+.gridPair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gridPair .lab{text-align:center;font-family:var(--font-display);margin-bottom:6px}
+
+/* typing */
+.sky{position:relative;height:380px;border-radius:14px;overflow:hidden;background:linear-gradient(#21384A,#3C5E6B);touch-action:manipulation}
+.sky .star{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;opacity:.6}
+.fall{position:absolute;top:-40px;transform:translateX(50%);background:#FDFBF7;color:var(--ink);border-radius:12px;padding:4px 12px;font-family:var(--font-display);font-size:1.5rem;font-weight:500;white-space:nowrap;box-shadow:0 3px 0 rgba(0,0,0,.18)}
+.fall.match{background:#FFE7B8}
+.fall.pop{transition:transform .3s,opacity .3s;transform:translateX(50%) scale(1.4);opacity:0}
+.typed{text-align:center;font-family:var(--font-display);font-size:1.6rem;min-height:2.2em;margin-top:10px;letter-spacing:.06em}
+.kb{display:flex;flex-direction:column;gap:6px;margin-top:10px;align-items:center}
+.kb div{display:flex;gap:5px;flex-wrap:nowrap}
+.kb button{min-width:34px;height:42px;border-radius:9px;border:1px solid var(--line);background:var(--card);font-family:var(--font-display);font-size:1.15rem;cursor:pointer;padding:0 6px}
+.modeTabs{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
+
+/* celebration */
+.overlay{position:fixed;inset:0;background:rgba(42,47,46,.35);display:grid;place-items:center;z-index:20;padding:16px}
+.celebrate{background:var(--bg);border-radius:24px;padding:28px 22px;max-width:420px;width:100%;text-align:center;border:1px solid var(--line);position:relative;overflow:hidden}
+.celebrate h2{font-size:2rem;margin:8px 0 4px}
+.celebrate .acts{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+@keyframes rise{from{transform:translateY(20px);opacity:0}to{transform:none;opacity:1}}
+.celebrate{animation:rise .35s ease-out}
+.confetti{position:absolute;width:8px;height:14px;border-radius:2px;top:-20px;opacity:.85}
+@keyframes drop{to{transform:translateY(520px) rotate(540deg)}}
+
+/* parents */
+.worlds{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.world{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:6px;cursor:pointer;text-align:start}
+.world b{font-family:var(--font-display);font-size:1.15rem;font-weight:500}
+.world small{color:var(--muted)}
+.cats{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.cat{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:10px 4px;cursor:pointer;text-align:center;font-size:.88rem}
+.cat .e{font-size:1.6rem;display:block}
+.cat[aria-pressed="true"]{border-color:var(--brand);background:var(--brand-soft)}
+
+/* print */
+.printPage{background:#EDE8DE;min-height:100vh;padding:16px}
+.printBar{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:14px}
+.sheet{width:100%;max-width:760px;margin:0 auto;aspect-ratio:1000/1414;background:#fff;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.sheet svg{width:100%;height:100%;display:block}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:12px;z-index:40;font-size:.95rem;max-width:90vw;text-align:center}
+@media print{
+  @page{size:A4 portrait;margin:0}
+  .printBar,.toast,.topbar{display:none!important}
+  .printPage{background:#fff;padding:0}
+  .sheet{max-width:none;width:210mm;height:297mm;box-shadow:none}
+}
+
+@media (max-width:620px){
+  h1{font-size:1.55rem}
+  .types{grid-template-columns:repeat(2,1fr)}
+  .levels{grid-template-columns:repeat(2,1fr)}
+  .worlds{grid-template-columns:1fr}
+  .cats{grid-template-columns:repeat(3,1fr)}
+  .station{width:62%}
+  .station.left{margin-inline-start:38%}
+  .station .art{width:118px;height:118px}
+  .station .num{inset-inline-start:calc(50% - 68px)}
+  .mineRow{grid-template-columns:repeat(2,1fr)}
+  .gridPair{grid-template-columns:1fr}
+  .kb button{min-width:27px;height:40px;font-size:1rem;padding:0 3px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* ===== Original SVG art: stations, type icons, local line-art library, dot outlines ===== */
+const INK = "#2A2F2E";
+
+const STATION_ART = {
+  color: `<svg viewBox="0 0 120 120" width="100%" height="100%" aria-hidden="true">
+    <path d="M28 78c-8-20 10-44 34-44 22 0 36 16 30 34-4 14-18 10-22 18-5 10-34 12-42-8z" fill="#F7D9A8" stroke="${INK}" stroke-width="2.5"/>
+    <circle cx="48" cy="56" r="7" fill="#E07A6A"/><circle cx="66" cy="50" r="6" fill="#3C7A71"/><circle cx="78" cy="64" r="6" fill="#7BA7D9"/>
+    <g transform="rotate(-38 70 80)"><rect x="62" y="52" width="14" height="46" rx="3" fill="#E9A23B" stroke="${INK}" stroke-width="2.5"/><path d="M62 98l7 12 7-12z" fill="#F3EBDD" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/><rect x="62" y="60" width="14" height="6" fill="#fff" opacity=".6"/></g>
+  </svg>`,
+  dots: `<svg viewBox="0 0 120 120" width="100%" height="100%" aria-hidden="true">
+    <path d="M60 22 70 46 96 48 76 64 82 90 60 76 38 90 44 64 24 48 50 46z" fill="none" stroke="#3C7A71" stroke-width="2.5" stroke-dasharray="5 5" stroke-linejoin="round"/>
+    <g fill="${INK}"><circle cx="60" cy="22" r="4"/><circle cx="70" cy="46" r="4"/><circle cx="96" cy="48" r="4"/><circle cx="76" cy="64" r="4"/><circle cx="82" cy="90" r="4"/><circle cx="60" cy="76" r="4"/><circle cx="38" cy="90" r="4"/><circle cx="44" cy="64" r="4"/><circle cx="24" cy="48" r="4"/><circle cx="50" cy="46" r="4"/></g>
+    <g font-family="Rubik,sans-serif" font-size="9" fill="${INK}"><text x="64" y="18">1</text><text x="100" y="45">3</text><text x="86" y="98">5</text></g>
+  </svg>`,
+  maze: `<svg viewBox="0 0 120 120" width="100%" height="100%" aria-hidden="true">
+    <rect x="22" y="22" width="76" height="76" rx="6" fill="#F3EBDD" stroke="${INK}" stroke-width="2.5"/>
+    <path d="M22 41h38M79 22v38M41 60h38M41 60v19M60 79h38M41 98V79" stroke="${INK}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M90 31 H70 V50 H50 V70 H32 V90" stroke="#E9A23B" stroke-width="3" fill="none" stroke-dasharray="3 4" stroke-linecap="round"/>
+    <circle cx="90" cy="31" r="5" fill="#3C7A71"/><path d="M28 86l8 0-4 8z" fill="#E07A6A"/>
+  </svg>`,
+  letters: `<svg viewBox="0 0 120 120" width="100%" height="100%" aria-hidden="true">
+    <rect x="18" y="30" width="44" height="44" rx="10" fill="#E3EEEB" stroke="${INK}" stroke-width="2.5" transform="rotate(-6 40 52)"/>
+    <text x="40" y="64" text-anchor="middle" font-family="Rubik,sans-serif" font-size="30" font-weight="600" fill="#3C7A71" transform="rotate(-6 40 52)">א</text>
+    <rect x="58" y="48" width="44" height="44" rx="10" fill="#F7D9A8" stroke="${INK}" stroke-width="2.5" transform="rotate(7 80 70)"/>
+    <text x="80" y="82" text-anchor="middle" font-family="Rubik,sans-serif" font-size="26" font-weight="600" fill="${INK}" transform="rotate(7 80 70)">2+3</text>
+    <circle cx="90" cy="28" r="3" fill="#E9A23B"/><circle cx="24" cy="94" r="3" fill="#E07A6A"/>
+  </svg>`,
+  lands: `<svg viewBox="0 0 120 120" width="100%" height="100%" aria-hidden="true">
+    <path d="M18 34l26-8 30 8 28-8v62l-28 8-30-8-26 8z" fill="#F3EBDD" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M44 26v62M74 34v62" stroke="${INK}" stroke-width="1.5" opacity=".4"/>
+    <path d="M28 52c6-6 12 2 10 8s6 10 12 6M80 50c8 0 10 10 4 14" fill="none" stroke="#3C7A71" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M62 30c-9 0-15 7-15 15 0 11 15 24 15 24s15-13 15-24c0-8-6-15-15-15z" fill="#E07A6A" stroke="${INK}" stroke-width="2.5"/>
+    <circle cx="62" cy="45" r="5" fill="#fff"/>
+  </svg>`,
+  globie: `<svg viewBox="0 0 120 120" width="100%" height="100%" aria-hidden="true">
+    <ellipse cx="60" cy="60" rx="46" ry="15" fill="none" stroke="#E9A23B" stroke-width="2.5" transform="rotate(-18 60 60)"/>
+    <circle cx="60" cy="60" r="30" fill="#BFDCE8" stroke="${INK}" stroke-width="2.5"/>
+    <path d="M42 46c8-4 12 4 18 2s8 6 4 10-12 0-14 8-8 2-10-4 0-12 2-16zM70 72c4-4 12-2 12 4s-8 8-12 4z" fill="#8FC1A0" stroke="${INK}" stroke-width="1.5"/>
+    <circle cx="52" cy="58" r="2.6" fill="${INK}"/><circle cx="68" cy="58" r="2.6" fill="${INK}"/>
+    <path d="M53 67q7 6 14 0" fill="none" stroke="${INK}" stroke-width="2.2" stroke-linecap="round"/>
+    <circle cx="96" cy="44" r="5" fill="#E07A6A" stroke="${INK}" stroke-width="1.5"/>
+  </svg>`
+};
+
+const TYPE_ICON = {
+  dots: STATION_ART.dots, coloring: STATION_ART.color, maze: STATION_ART.maze, typing: STATION_ART.letters,
+  paint: `<svg viewBox="0 0 120 120" aria-hidden="true"><rect x="20" y="24" width="80" height="72" rx="10" fill="#fff" stroke="${INK}" stroke-width="2.5"/><circle cx="50" cy="58" r="16" fill="#F7D9A8" stroke="${INK}" stroke-width="2.5"/><path d="M58 60l26 26" stroke="#3C7A71" stroke-width="7" stroke-linecap="round"/><path d="M80 82l8 8" stroke="${INK}" stroke-width="7" stroke-linecap="round"/></svg>`,
+  grid: `<svg viewBox="0 0 120 120" aria-hidden="true"><rect x="18" y="26" width="36" height="36" fill="#fff" stroke="${INK}" stroke-width="2"/><path d="M30 26v36M42 26v36M18 38h36M18 50h36" stroke="#9BB" stroke-width="1"/><path d="M24 54q12-26 24 0" fill="none" stroke="${INK}" stroke-width="2.5"/><rect x="66" y="58" width="36" height="36" fill="#fff" stroke="${INK}" stroke-width="2"/><path d="M78 58v36M90 58v36M66 70h36M66 82h36" stroke="#9BB" stroke-width="1"/><path d="M72 86q6-14 12-12" fill="none" stroke="#3C7A71" stroke-width="2.5" stroke-linecap="round"/><path d="M56 50l8 8" stroke="#E9A23B" stroke-width="3" stroke-linecap="round"/></svg>`
+};
+
+/* ---- Local line-art library. viewBox 0 0 400 400. Closed shapes fill white (later shapes cover earlier). ---- */
+function starPts(cx, cy, R, r, n = 5, rot = -90) {
+  const p = [];
+  for (let i = 0; i < n * 2; i++) {
+    const a = (rot + i * 180 / n) * Math.PI / 180, rr = i % 2 ? r : R;
+    p.push((cx + rr * Math.cos(a)).toFixed(1) + "," + (cy + rr * Math.sin(a)).toFixed(1));
+  }
+  return p.join(" ");
+}
+const LINE_ART = {
+  cat: `<path d="M270 335 C345 335 355 250 312 228" fill="none"/>
+    <ellipse cx="200" cy="290" rx="88" ry="70"/>
+    <polygon points="140,140 146,66 192,108"/><polygon points="260,140 254,66 208,108"/>
+    <circle cx="200" cy="172" r="72"/>
+    <polygon points="152,120 154,88 174,108" fill="none"/><polygon points="248,120 246,88 226,108" fill="none"/>
+    <ellipse cx="174" cy="165" rx="10" ry="14"/><ellipse cx="226" cy="165" rx="10" ry="14"/>
+    <circle cx="176" cy="160" r="4" fill="${INK}"/><circle cx="228" cy="160" r="4" fill="${INK}"/>
+    <polygon points="190,192 210,192 200,203"/>
+    <path d="M200 203 Q190 218 178 210 M200 203 Q210 218 222 210" fill="none"/>
+    <path d="M150 196 L104 188 M150 206 L106 214 M250 196 L296 188 M250 206 L294 214" fill="none"/>
+    <ellipse cx="162" cy="350" rx="26" ry="15"/><ellipse cx="238" cy="350" rx="26" ry="15"/>
+    <path d="M175 250 Q200 266 225 250" fill="none"/>`,
+  dog: `<path d="M300 268 Q352 232 338 196" fill="none"/>
+    <ellipse cx="215" cy="290" rx="98" ry="64"/>
+    <circle cx="245" cy="280" r="22"/>
+    <ellipse cx="160" cy="350" rx="26" ry="15"/><ellipse cx="262" cy="350" rx="26" ry="15"/>
+    <circle cx="168" cy="180" r="70"/>
+    <path d="M112 140 Q80 205 116 246 Q142 205 132 146 Z"/><path d="M224 140 Q256 205 220 246 Q194 205 204 146 Z"/>
+    <circle cx="146" cy="172" r="8" fill="${INK}"/><circle cx="190" cy="172" r="8" fill="${INK}"/>
+    <ellipse cx="168" cy="214" rx="32" ry="22"/>
+    <ellipse cx="168" cy="204" rx="12" ry="8" fill="${INK}"/>
+    <path d="M168 212 L168 224 Q158 232 150 226 M168 224 Q178 232 186 226" fill="none"/>
+    <path d="M128 246 Q168 262 208 246 L204 262 Q168 276 132 262 Z"/>
+    <circle cx="168" cy="276" r="9"/>`,
+  fish: `<polygon points="300,200 372,138 366,200 372,262"/>
+    <path d="M160 128 Q206 70 256 130 Z"/>
+    <path d="M190 272 Q214 312 244 270 Z"/>
+    <ellipse cx="200" cy="200" rx="124" ry="82"/>
+    <path d="M148 146 Q172 200 148 254" fill="none"/>
+    <path d="M200 160 q16 16 0 32 M236 160 q16 16 0 32 M218 204 q16 16 0 32 M254 204 q16 16 0 32 M200 236 q10 10 0 20" fill="none"/>
+    <circle cx="118" cy="182" r="17"/><circle cx="114" cy="180" r="7" fill="${INK}"/>
+    <path d="M84 214 Q96 222 108 214" fill="none"/>
+    <circle cx="66" cy="120" r="11"/><circle cx="46" cy="86" r="7"/><circle cx="72" cy="58" r="5"/>
+    <path d="M40 360 Q60 330 50 300 M70 365 Q95 330 80 296 M340 365 Q320 330 334 300" fill="none"/>`,
+  car: `<path d="M30 306 L370 306" fill="none"/>
+    <path d="M48 262 L66 204 L130 192 L170 140 L282 140 L322 192 L362 206 L364 262 Z"/>
+    <polygon points="182,156 226,156 226,192 150,192"/><polygon points="240,156 276,156 306,192 240,192"/>
+    <path d="M233 196 L233 256 M246 214 L262 214" fill="none"/>
+    <rect x="340" y="214" width="18" height="16" rx="4"/><rect x="52" y="220" width="16" height="14" rx="4"/>
+    <circle cx="122" cy="266" r="38"/><circle cx="122" cy="266" r="15"/>
+    <circle cx="292" cy="266" r="38"/><circle cx="292" cy="266" r="15"/>
+    <path d="M20 140 L50 140 M30 170 L70 170 M14 200 L40 200" fill="none"/>`,
+  rocket: `<path d="M170 318 Q200 392 230 318 Z"/>
+    <path d="M182 318 Q200 360 218 318 Z"/>
+    <polygon points="152,246 102,324 156,302"/><polygon points="248,246 298,324 244,302"/>
+    <path d="M200 48 C262 110 262 222 250 312 L150 312 C138 222 138 110 200 48 Z"/>
+    <path d="M166 108 Q200 126 234 108" fill="none"/>
+    <circle cx="200" cy="172" r="30"/><circle cx="200" cy="172" r="17"/>
+    <path d="M180 250 L220 250 M186 272 L214 272" fill="none"/>
+    <circle cx="330" cy="92" r="30"/><ellipse cx="330" cy="92" rx="52" ry="12" fill="none" transform="rotate(-20 330 92)"/>
+    <polygon points="${starPts(70, 80, 18, 8)}"/><polygon points="${starPts(340, 250, 13, 6)}"/><polygon points="${starPts(60, 260, 11, 5)}"/>`,
+  house: `<rect x="252" y="92" width="32" height="64"/>
+    <polygon points="78,192 200,78 322,192"/>
+    <rect x="100" y="192" width="200" height="150"/>
+    <rect x="178" y="268" width="46" height="74" rx="4"/><circle cx="214" cy="306" r="4" fill="${INK}"/>
+    <rect x="118" y="216" width="46" height="40"/><path d="M141 216 L141 256 M118 236 L164 236" fill="none"/>
+    <rect x="236" y="216" width="46" height="40"/><path d="M259 216 L259 256 M236 236 L282 236" fill="none"/>
+    <circle cx="200" cy="148" r="16"/>
+    <circle cx="350" cy="64" r="24"/>
+    <path d="M30 342 L370 342" fill="none"/>
+    <path d="M60 342 L60 316 M330 342 L330 312" fill="none"/><circle cx="60" cy="306" r="11"/><circle cx="330" cy="300" r="13"/>`,
+  tree: `<path d="M178 362 L188 248 L212 248 L222 362 Z"/>
+    <path d="M200 296 L240 270 M196 316 L168 296" fill="none"/>
+    <circle cx="136" cy="200" r="58"/><circle cx="264" cy="200" r="58"/>
+    <circle cx="200" cy="148" r="84"/>
+    <ellipse cx="200" cy="226" rx="100" ry="40"/>
+    <circle cx="160" cy="130" r="13"/><circle cx="236" cy="118" r="13"/><circle cx="210" cy="190" r="13"/><circle cx="130" cy="210" r="13"/><circle cx="272" cy="206" r="13"/>
+    <path d="M40 364 L360 364" fill="none"/>
+    <path d="M70 364 L76 344 L82 364 M300 364 L308 340 L314 364" fill="none"/>
+    <path d="M320 76 q12 -12 24 0 q12 -12 24 0" fill="none"/>`,
+  flower: `<path d="M200 226 Q186 300 200 372" fill="none"/>
+    <path d="M196 306 Q146 268 128 300 Q160 326 196 306 Z"/>
+    <path d="M200 334 Q252 296 270 328 Q238 352 200 334 Z"/>
+    ${[0, 60, 120, 180, 240, 300].map(a => `<ellipse cx="200" cy="124" rx="32" ry="52" transform="rotate(${a} 200 182)"/>`).join("")}
+    <circle cx="200" cy="182" r="36"/>
+    <circle cx="188" cy="174" r="5" fill="${INK}"/><circle cx="212" cy="174" r="5" fill="${INK}"/><path d="M186 192 Q200 204 214 192" fill="none"/>
+    <path d="M40 372 L360 372" fill="none"/>`,
+  dinosaur: `<path d="M262 258 Q342 276 374 222 Q340 306 250 304 Z"/>
+    <rect x="164" y="292" width="32" height="68" rx="10"/><rect x="246" y="292" width="32" height="68" rx="10"/>
+    <path d="M148 254 Q118 172 136 106 L176 106 Q166 180 198 240 Z"/>
+    <polygon points="200,222 214,196 228,218"/><polygon points="230,218 246,194 260,222"/><polygon points="262,226 278,206 288,236"/>
+    <ellipse cx="222" cy="272" rx="92" ry="60"/>
+    <ellipse cx="160" cy="98" rx="44" ry="28"/>
+    <circle cx="170" cy="90" r="6" fill="${INK}"/>
+    <path d="M124 108 Q140 118 156 110" fill="none"/>
+    <path d="M190 262 Q206 276 222 262 M226 286 Q240 298 254 286" fill="none"/>
+    <path d="M30 362 L370 362" fill="none"/>`,
+  robot: `<path d="M200 70 L200 100" fill="none"/><circle cx="200" cy="62" r="11"/>
+    <rect x="88" y="214" width="36" height="92" rx="16"/><rect x="276" y="214" width="36" height="92" rx="16"/>
+    <rect x="150" y="320" width="36" height="46" rx="6"/><rect x="214" y="320" width="36" height="46" rx="6"/>
+    <rect x="186" y="186" width="28" height="22"/>
+    <rect x="126" y="204" width="148" height="122" rx="16"/>
+    <rect x="160" y="228" width="80" height="50" rx="8"/>
+    <circle cx="180" cy="300" r="8"/><circle cx="200" cy="300" r="8"/><circle cx="220" cy="300" r="8"/>
+    <path d="M176 246 L224 246 M176 260 L210 260" fill="none"/>
+    <rect x="138" y="98" width="124" height="92" rx="18"/>
+    <circle cx="174" cy="138" r="15"/><circle cx="226" cy="138" r="15"/>
+    <circle cx="174" cy="138" r="6" fill="${INK}"/><circle cx="226" cy="138" r="6" fill="${INK}"/>
+    <rect x="170" y="164" width="60" height="12" rx="5"/>
+    <rect x="126" y="126" width="12" height="28" rx="4"/><rect x="262" y="126" width="12" height="28" rx="4"/>`,
+  butterfly: `<g><path d="M200 200 C150 86 52 96 76 182 C88 224 150 222 200 202 Z"/><path d="M200 208 C150 230 88 262 118 312 C150 344 190 282 200 216 Z"/>
+    <circle cx="124" cy="160" r="20"/><circle cx="146" cy="268" r="14"/><circle cx="96" cy="196" r="8"/></g>
+    <g transform="translate(400 0) scale(-1 1)"><path d="M200 200 C150 86 52 96 76 182 C88 224 150 222 200 202 Z"/><path d="M200 208 C150 230 88 262 118 312 C150 344 190 282 200 216 Z"/>
+    <circle cx="124" cy="160" r="20"/><circle cx="146" cy="268" r="14"/><circle cx="96" cy="196" r="8"/></g>
+    <ellipse cx="200" cy="212" rx="13" ry="64"/>
+    <circle cx="200" cy="150" r="16"/>
+    <path d="M194 136 Q180 100 156 92 M206 136 Q220 100 244 92" fill="none"/>
+    <circle cx="154" cy="90" r="6"/><circle cx="246" cy="90" r="6"/>`,
+  castle: `<path d="M105 80 L105 48 L132 58 L105 66 M295 80 L295 48 L322 58 L295 66" fill="none"/>
+    <polygon points="60,152 105,80 150,152"/><polygon points="250,152 295,80 340,152"/>
+    <rect x="70" y="152" width="70" height="210"/><rect x="260" y="152" width="70" height="210"/>
+    <rect x="132" y="182" width="24" height="22"/><rect x="170" y="182" width="24" height="22"/><rect x="206" y="182" width="24" height="22"/><rect x="244" y="182" width="24" height="22"/>
+    <rect x="132" y="202" width="136" height="160"/>
+    <path d="M172 362 L172 292 Q200 258 228 292 L228 362 Z"/>
+    <path d="M200 270 L200 362 M172 316 L228 316" fill="none"/>
+    <path d="M92 206 Q105 190 118 206 L118 236 L92 236 Z"/><path d="M282 206 Q295 190 308 206 L308 236 L282 236 Z"/>
+    <circle cx="200" cy="236" r="14"/>
+    <path d="M20 362 L380 362" fill="none"/>`,
+  star: `<polygon points="${starPts(200, 210, 150, 66)}"/>
+    <circle cx="176" cy="200" r="9" fill="${INK}"/><circle cx="224" cy="200" r="9" fill="${INK}"/>
+    <path d="M178 236 Q200 256 222 236" fill="none"/>
+    <circle cx="160" cy="226" r="9"/><circle cx="240" cy="226" r="9"/>
+    <polygon points="${starPts(70, 70, 22, 10)}"/><polygon points="${starPts(338, 80, 16, 7)}"/><polygon points="${starPts(330, 340, 20, 9)}"/>
+    <path d="M60 330 q14 -14 28 0 q14 -14 28 0" fill="none"/>`,
+  ball: `<circle cx="200" cy="200" r="130"/>
+    <polygon points="${starPts(200, 200, 44, 44, 5, -90).split(" ").filter((_, i) => i % 2 === 0).join(" ")}"/>
+    <path d="M200 156 L200 72 M242 186 L318 156 M226 236 L276 300 M174 236 L124 300 M158 186 L82 156" fill="none"/>
+    <path d="M168 76 L200 72 L232 78 M308 130 L318 156 L326 190 M290 290 L276 300 L248 320 M150 320 L124 300 L104 280 M74 190 L82 156 L96 126" fill="none"/>
+    <path d="M40 360 L360 360" fill="none"/><path d="M110 380 Q200 350 290 380" fill="none"/>`,
+  whale: `<path d="M318 214 Q350 150 386 162 Q362 196 386 236 Q350 246 318 214 Z"/>
+    <path d="M60 230 C60 140 160 110 240 130 C300 146 330 190 320 230 C310 290 200 300 140 290 C90 282 60 266 60 230 Z"/>
+    <path d="M90 250 Q180 290 290 248" fill="none"/>
+    <path d="M150 270 Q170 320 200 290 Z"/>
+    <circle cx="120" cy="200" r="8" fill="${INK}"/>
+    <path d="M70 238 Q90 246 110 236" fill="none"/>
+    <path d="M150 120 Q140 80 120 70 M150 120 Q156 76 176 64 M150 120 Q150 84 150 60" fill="none"/>
+    <path d="M20 340 q20 -16 40 0 q20 -16 40 0 q20 -16 40 0 M240 350 q20 -16 40 0 q20 -16 40 0 q20 -16 40 0" fill="none"/>`
+};
+
+/* Dot outlines, normalized 0-100, simple closed silhouettes */
+function paramShape(fn, n) { const p = []; for (let i = 0; i < n; i++) p.push(fn(i / n * Math.PI * 2)); return p; }
+const DOT_SHAPES = {
+  star: (() => { const p = []; for (let i = 0; i < 10; i++) { const a = (-90 + i * 36) * Math.PI / 180, r = i % 2 ? 19 : 44; p.push([50 + r * Math.cos(a), 54 + r * Math.sin(a)]); } return p; })(),
+  heart: paramShape(t => [50 + 2.6 * 16 * Math.pow(Math.sin(t), 3), 48 - 2.6 * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t))], 48),
+  fish: [[12, 50], [24, 34], [42, 26], [60, 28], [72, 40], [90, 24], [86, 50], [90, 76], [72, 60], [60, 72], [42, 74], [24, 66]],
+  house: [[16, 46], [50, 14], [84, 46], [74, 46], [74, 88], [26, 88], [26, 46]],
+  rocket: [[50, 6], [62, 22], [67, 46], [65, 68], [80, 88], [60, 82], [40, 82], [20, 88], [35, 68], [33, 46], [38, 22]],
+  tree: [[50, 6], [72, 34], [62, 34], [80, 56], [67, 56], [86, 78], [56, 78], [56, 94], [44, 94], [44, 78], [14, 78], [33, 56], [20, 56], [38, 34], [28, 34]],
+  cat: [[26, 92], [22, 62], [30, 42], [24, 10], [42, 28], [58, 28], [76, 10], [70, 42], [78, 62], [74, 92]],
+  car: [[6, 70], [8, 54], [26, 49], [38, 32], [66, 32], [78, 49], [94, 54], [94, 70], [82, 70], [76, 61], [66, 61], [60, 70], [40, 70], [34, 61], [24, 61], [18, 70]],
+  boat: [[8, 62], [47, 62], [47, 12], [80, 54], [53, 54], [53, 62], [92, 62], [77, 84], [23, 84]],
+  dinosaur: [[6, 72], [28, 62], [44, 50], [52, 30], [55, 14], [68, 9], [76, 15], [66, 20], [62, 34], [64, 50], [80, 56], [92, 72], [80, 72], [70, 75], [70, 92], [61, 92], [59, 77], [46, 77], [44, 92], [35, 92], [33, 75]],
+  butterfly: [[50, 32], [40, 12], [18, 10], [9, 30], [22, 48], [12, 66], [24, 88], [44, 74], [50, 60], [56, 74], [76, 88], [88, 66], [78, 48], [91, 30], [82, 10], [60, 12]],
+  robot: [[30, 18], [70, 18], [70, 40], [84, 44], [90, 70], [80, 70], [76, 52], [70, 52], [70, 92], [56, 92], [56, 76], [44, 76], [44, 92], [30, 92], [30, 52], [24, 52], [20, 70], [10, 70], [16, 44], [30, 40]],
+  castle: [[10, 92], [10, 30], [20, 14], [30, 30], [30, 44], [40, 44], [40, 36], [50, 36], [50, 44], [60, 44], [60, 36], [70, 36], [70, 30], [80, 14], [90, 30], [90, 92], [60, 92], [60, 74], [50, 66], [40, 74], [40, 92]],
+  whale: [[8, 56], [16, 38], [36, 30], [58, 32], [74, 44], [86, 30], [96, 34], [88, 50], [96, 66], [84, 64], [74, 60], [62, 70], [40, 72], [20, 68]],
+  flower: paramShape(t => { const r = 28 + 14 * Math.cos(6 * t); return [50 + r * Math.cos(t), 50 + r * Math.sin(t)]; }, 60)
+};
+
+/* Topic understanding (keywords → art, dot outline, emoji) */
+const THEMES = [
+  { k: ["חתול", "חתולה", "חתלתול", "מיאו"], art: "cat", dots: "cat", e: "🐱" },
+  { k: ["כלב", "כלבה", "גור", "כלבלב", "הב"], art: "dog", dots: "cat", e: "🐶" },
+  { k: ["דג", "דגים", "ים", "מתחת למים", "שונית", "אקווריום", "צולל"], art: "fish", dots: "fish", e: "🐟" },
+  { k: ["לווייתן", "דולפין", "אוקיינוס"], art: "whale", dots: "whale", e: "🐳" },
+  { k: ["מכונית", "רכב", "אוטו", "משאית", "מרוץ", "כלי רכב", "אוטובוס", "טרקטור"], art: "car", dots: "car", e: "🚗" },
+  { k: ["סירה", "ספינה", "מפרש", "פיראט"], art: "whale", dots: "boat", e: "⛵" },
+  { k: ["חללית", "טיל", "חלל", "אסטרונאוט", "רקטה", "ירח", "כוכב לכת", "חייזר"], art: "rocket", dots: "rocket", e: "🚀" },
+  { k: ["בית", "עיר", "שכונה", "מקום", "מקומות", "בניין"], art: "house", dots: "house", e: "🏠" },
+  { k: ["עץ", "יער", "טבע", "תפוח", "עצים"], art: "tree", dots: "tree", e: "🌳" },
+  { k: ["פרח", "פרחים", "גינה", "אביב", "שושנה", "חמנייה"], art: "flower", dots: "flower", e: "🌸" },
+  { k: ["דינוזאור", "דינו", "טירנוזאור", "דינוזאורים"], art: "dinosaur", dots: "dinosaur", e: "🦕" },
+  { k: ["רובוט", "רובוטים", "ממציא", "מכונה"], art: "robot", dots: "robot", e: "🤖" },
+  { k: ["פרפר", "פרפרים", "חרק", "דבורה"], art: "butterfly", dots: "butterfly", e: "🦋" },
+  { k: ["טירה", "נסיכה", "נסיך", "מלך", "מלכה", "פנטזיה", "אביר", "דרקון", "קסם", "מכושף"], art: "castle", dots: "castle", e: "🏰" },
+  { k: ["כדור", "ספורט", "כדורגל", "כדורסל", "משחק"], art: "ball", dots: "star", e: "⚽" },
+  { k: ["כוכב", "כוכבים", "לילה", "יום הולדת", "חג", "חגים", "מסיבה"], art: "star", dots: "star", e: "⭐" },
+  { k: ["לב", "אהבה", "חבר", "חברים", "משפחה"], art: "star", dots: "heart", e: "💛" }
+];
+function themeFor(topic) {
+  const t = (topic || "").trim();
+  for (const th of THEMES) if (th.k.some(w => t.includes(w))) return th;
+  const keys = Object.keys(LINE_ART);
+  let h = 0; for (const ch of t) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  const art = keys[h % keys.length];
+  const th = THEMES.find(x => x.art === art) || THEMES[0];
+  return { art, dots: th.dots, e: th.e, guessed: true };
+}
+
+const AVATARS = ["🦊", "🐻", "🐰", "🐼", "🦁", "🐸", "🐢", "🦉"];
+const LEVELS = [
+  { id: 1, name: "מתחילים", ages: "4–6" },
+  { id: 2, name: "מתקדמים", ages: "6–8" },
+  { id: 3, name: "מומחים", ages: "8–10" },
+  { id: 4, name: "אתגר", ages: "11+" }
+];
+const STYLES = [
+  { id: "cute", name: "חמוד", e: "🧸" }, { id: "funny", name: "מצחיק", e: "😄" }, { id: "cool", name: "מגניב", e: "😎" },
+  { id: "real", name: "ריאליסטי", e: "🔍" }, { id: "crazy", name: "משוגע", e: "🌀" }, { id: "mystery", name: "מסתורי", e: "🌙" }
+];
+const TYPES = [
+  { id: "coloring", name: "דף צביעה", d: "ציור קווים להדפסה ולצביעה" },
+  { id: "paint", name: "צביעה אונליין", d: "צובעים על המסך באצבע" },
+  { id: "dots", name: "חבר את הנקודות", d: "מחברים לפי הסדר ומגלים ציור" },
+  { id: "maze", name: "מבוך", d: "מוצאים את הדרך ליעד" },
+  { id: "grid", name: "העתקה לפי גריד", d: "מעתיקים ריבוע אחרי ריבוע" },
+  { id: "typing", name: "משחק הקלדה", d: "מקלידים מילים שנופלות" }
+];
+const WORLDS = {
+  create: { name: "יצירה", d: "צובעים, מציירים ומעתיקים", types: ["coloring", "paint", "grid"], e: "🎨" },
+  practice: { name: "תרגול", d: "סדר, ספירה וריכוז", types: ["dots", "grid", "typing"], e: "✏️" },
+  play: { name: "משחק", d: "מבוכים, הקלדה וצבע על המסך", types: ["maze", "typing", "paint"], e: "🎈" }
+};
+const CATEGORIES = [
+  { n: "בעלי חיים", e: "🐾", t: ["חתול שמשחק בצמר", "כלב עם כדור", "פרפר בשדה"] },
+  { n: "כלי רכב", e: "🚗", t: ["מכונית מרוץ", "משאית גדולה", "סירה במפרש"] },
+  { n: "גיבורים", e: "🦸", t: ["גיבורה עם גלימה", "רובוט גיבור", "אביר אמיץ"] },
+  { n: "דינוזאורים", e: "🦕", t: ["דינוזאור עם צוואר ארוך", "דינוזאור חוגג", "ביצת דינוזאור"] },
+  { n: "חלל", e: "🚀", t: ["חללית לירח", "אסטרונאוט מרחף", "כוכב לכת עם טבעות"] },
+  { n: "פנטזיה", e: "🏰", t: ["טירה בעננים", "דרקון ידידותי", "נסיכה ביער"] },
+  { n: "רובוטים", e: "🤖", t: ["רובוט שמבשל", "רובוט כלב", "רובוט בגינה"] },
+  { n: "מתחת למים", e: "🐟", t: ["דג בשונית", "לווייתן שר", "צוללת צהובה"] },
+  { n: "טבע", e: "🌳", t: ["עץ תפוחים", "פרח חמנייה", "יער בשקיעה"] },
+  { n: "ספורט", e: "⚽", t: ["כדורגל במגרש", "כדור קופץ", "מרוץ אופניים"] },
+  { n: "אוכל מצחיק", e: "🍕", t: ["פיצה מחייכת", "גלידה רוקדת", "תפוח עם משקפיים"] },
+  { n: "מקצועות", e: "👩‍🚒", t: ["כבאית אמיצה", "רופא חיות", "טייסת"] },
+  { n: "מקומות", e: "🏠", t: ["בית קטן בכפר", "עיר בלילה", "מגדלור על החוף"] },
+  { n: "חגים", e: "⭐", t: ["כוכב של יום הולדת", "סביבון", "מסכה לפורים"] },
+  { n: "יצורים מומצאים", e: "🦄", t: ["יצור עם שלוש עיניים", "חד קרן מעופף", "מפלצת ידידותית"] }
+];
+const IDEAS = {
+  1: ["חתול עם כובע", "דג בים", "מכונית אדומה", "בית קטן", "פרח בגינה", "פרפר צבעוני", "רובוט חמוד", "דינוזאור קטן", "כוכב שמח", "כלב עם כדור"],
+  2: ["חללית לירח", "טירה של נסיכה", "כלב שמשחק בכדור", "עץ תפוחים", "לווייתן גדול", "מכונית מרוץ", "דינוזאור עם צוואר ארוך", "רובוט בגינה"],
+  3: ["רובוט שמבשל ארוחה", "דינוזאור שחוגג יום הולדת", "אסטרונאוט על ירח רחוק", "טירה בעננים", "פרפר ענק ביער קסום", "סירת פיראטים קטנה"],
+  4: ["מעבדה של ממציא רובוטים", "עיר מתחת למים", "משלחת לגילוי דינוזאורים", "תחנת חלל מסתורית", "יער מכושף בלילה", "מגדלור בסערה"]
+};
+
+/* Typing words by level */
+const WORDS = {
+  1: ["אב", "אם", "דג", "גן", "יד", "עט", "סל", "חג", "פה", "עץ", "גל", "ים", "לב", "בית", "סוס", "דוב", "גמל", "שמש", "אור", "חם"],
+  2: ["חתול", "כלב", "פרח", "ספר", "ילד", "ירח", "כוכב", "עוגה", "גשם", "ענן", "דבש", "תפוח", "ציפור", "נמר", "ארנב", "שוקו", "גלידה", "מטוס", "רכבת", "בננה"],
+  3: ["מכונית", "פרפר", "מטריה", "אופניים", "מחברת", "תרנגול", "שוקולד", "חללית", "משקפיים", "כדורגל", "מגדלור", "צוללת", "אבטיח", "פינגווין", "ספרייה", "שולחן"],
+  4: ["אסטרונאוט", "טלסקופ", "הרפתקאות", "מיקרוסקופ", "קרוקודיל", "אוקיינוס", "הליקופטר", "ארכיאולוג", "דינוזאורים", "מצלמות", "אנציקלופדיה", "ממלכות"]
+};
+const HEB_KEYS = { t: "א", c: "ב", d: "ג", s: "ד", v: "ה", u: "ו", z: "ז", j: "ח", y: "ט", h: "י", l: "ך", f: "כ", k: "ל", o: "ם", n: "מ", i: "ן", b: "נ", x: "ס", g: "ע", ";": "ף", p: "פ", ".": "ץ", m: "צ", e: "ק", r: "ר", a: "ש", ",": "ת" };
+const KB_ROWS = [["ק", "ר", "א", "ט", "ו", "ן", "ם", "פ"], ["ש", "ד", "ג", "כ", "ע", "י", "ח", "ל", "ך", "ף"], ["ז", "ס", "ב", "ה", "נ", "מ", "צ", "ת", "ץ"]];
+
+/* ===== Storage, Claude, generators, sheet rendering ===== */
+const LS = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
+};
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const shuffle = arr => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+
+/* ---- capabilities (all optional) ---- */
+const STANDALONE = !(window.claude && window.claude.use);
+const CAP = { db: null, uid: null, sample: undefined, downloads: null };
+const capReady = (async () => {
+  if (!window.claude || !window.claude.use) return;
+  try {
+    const [db, user, dl] = await Promise.all([claude.use("db"), claude.use("user"), claude.use("downloads")]);
+    CAP.downloads = dl || null;
+    if (db && user) { CAP.uid = await user.id(); if (CAP.uid) CAP.db = db; }
+  } catch (e) { }
+})();
+async function getSample() {
+  if (CAP.sample !== undefined) return CAP.sample;
+  if (!window.claude || !window.claude.use) return (CAP.sample = null);
+  try { CAP.sample = (await claude.use("sample")) || null; } catch (e) { CAP.sample = null; }
+  return CAP.sample;
+}
+const HARD_STOP = ["not_granted", "sampling_disabled", "not_declared", "capability_disabled", "capability_removed"];
+
+/* ---- Activity table ---- */
+const ACT_CACHE = {};
+function actRef(id) { return CAP.db.collection("data/users/" + CAP.uid).doc("act_" + id); }
+async function saveActivity(a) {
+  ACT_CACHE[a.id] = a;
+  const all = LS.get("activities", {});
+  all[a.id] = a;
+  const ids = Object.keys(all).sort((x, y) => (all[y].createdAt || 0) - (all[x].createdAt || 0));
+  for (const id of ids.slice(40)) delete all[id];
+  if (!LS.set("activities", all)) { const slim = {}; for (const id of ids.slice(0, 8)) slim[id] = all[id]; LS.set("activities", slim); }
+  await capReady;
+  if (CAP.db) { try { await actRef(a.id).set(a); } catch (e) { } }
+}
+async function getActivity(id) {
+  if (ACT_CACHE[id]) return ACT_CACHE[id];
+  const all = LS.get("activities", {});
+  if (all[id]) return (ACT_CACHE[id] = all[id]);
+  await capReady;
+  if (CAP.db) {
+    try {
+      const s = await actRef(id).get();
+      let d = s && (typeof s.data === "function" ? s.data() : (s.data !== undefined ? s.data : s));
+      if (s && s.exists === false) d = null;
+      if (d && d.id) return (ACT_CACHE[id] = d);
+    } catch (e) { }
+  }
+  return null;
+}
+async function deleteActivity(id) {
+  delete ACT_CACHE[id];
+  const all = LS.get("activities", {}); delete all[id]; LS.set("activities", all);
+  removeRecent(id);
+  await capReady;
+  if (CAP.db) { try { await actRef(id).delete(); } catch (e) { } }
+}
+function getRecent() { return LS.get("recentActivities", []); }
+function pushRecent(a) {
+  const list = getRecent().filter(r => r.id !== a.id);
+  list.unshift({ id: a.id, emoji: a.emoji, title: a.title, type: a.type });
+  LS.set("recentActivities", list.slice(0, 4));
+}
+function removeRecent(id) { LS.set("recentActivities", getRecent().filter(r => r.id !== id)); }
+
+/* ---- SVG sanitizing & coloring ---- */
+const SVG_TAGS = new Set(["g", "path", "circle", "ellipse", "rect", "polygon", "polyline", "line"]);
+const SVG_ATTRS = new Set(["d", "cx", "cy", "r", "rx", "ry", "x", "y", "width", "height", "points", "x1", "y1", "x2", "y2", "transform"]);
+function isDark(v) {
+  v = (v || "").trim().toLowerCase();
+  if (v === "black") return true;
+  let m = v.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/);
+  if (!m) return false;
+  let h = m[1]; if (h.length === 3) h = h.split("").map(c => c + c).join("");
+  const n = parseInt(h, 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255;
+  return (0.3 * r + 0.59 * g + 0.11 * b) < 80;
+}
+/* serialize a parsed SVG subtree using the whitelist; fillFn may override fills of closed shapes */
+function serializeKids(el, fillFn, counter) {
+  let out = "";
+  for (const c of el.children) {
+    const tag = c.localName;
+    if (!SVG_TAGS.has(tag)) continue;
+    let attrs = "";
+    for (const a of c.attributes) {
+      if (!SVG_ATTRS.has(a.name)) continue;
+      const v = a.value;
+      if (/[<>"&]/.test(v) || v.length > 6000) continue;
+      if (a.name === "transform" && !/^[\w\s(),.\-]+$/.test(v)) continue;
+      attrs += ` ${a.name}="${v}"`;
+    }
+    const raw = c.getAttribute("fill");
+    let fill = null;
+    if (tag === "line" || tag === "polyline") fill = "none";
+    else if (raw && raw.trim() === "none") fill = "none";
+    else if (raw && isDark(raw)) fill = INK;
+    else if (tag !== "g") { counter.n++; fill = fillFn ? fillFn(counter.n, tag) : null; }
+    if (fill) attrs += ` fill="${fill}"`;
+    if (tag !== "g") counter.shapes++;
+    out += `<${tag}${attrs}>${tag === "g" ? serializeKids(c, fillFn, counter) : ""}</${tag}>`;
+  }
+  return out;
+}
+function parseSvg(text) {
+  const doc = new DOMParser().parseFromString(text, "image/svg+xml");
+  if (doc.querySelector("parsererror")) return null;
+  return doc.documentElement;
+}
+function sanitizeSvg(src) {
+  const m = String(src || "").match(/<svg[\s\S]*?<\/svg>/i);
+  if (!m) return null;
+  const root = parseSvg(m[0]);
+  if (!root || root.localName !== "svg") return null;
+  const counter = { n: 0, shapes: 0 };
+  let inner = serializeKids(root, null, counter);
+  const vb = (root.getAttribute("viewBox") || "0 0 400 400").trim().split(/[\s,]+/).map(Number);
+  if (vb.length === 4 && vb.every(isFinite) && vb[2] > 0 && vb[3] > 0 && !(vb[0] === 0 && vb[1] === 0 && vb[2] === 400 && vb[3] === 400)) {
+    const s = 400 / Math.max(vb[2], vb[3]);
+    inner = `<g transform="scale(${s.toFixed(4)}) translate(${-vb[0]} ${-vb[1]})">${inner}</g>`;
+  }
+  return { markup: inner, shapes: counter.shapes };
+}
+const PALETTES = {
+  cute: ["#F6C9C4", "#FBE3A6", "#CDE6D3", "#C9DDF2", "#E8D5F0", "#FFD9B8"],
+  funny: ["#FFD166", "#EF8354", "#7BC67E", "#5DA9E9", "#F497B6", "#FFE29A"],
+  cool: ["#5DA9E9", "#3C7A71", "#9BC1BC", "#7A8FB5", "#F2A541", "#B8D8E8"],
+  real: ["#C8A882", "#8FB08A", "#A9C4D9", "#D9C7A7", "#B88B6A", "#E5DCC5"],
+  crazy: ["#FF6B6B", "#FFD93D", "#6BCB77", "#4D96FF", "#C77DFF", "#FF9F45"],
+  mystery: ["#8E7DBE", "#5B5F97", "#A5B4CB", "#6E8BA8", "#C9ADA7", "#E8DDF0"]
+};
+function colorize(markup, style) {
+  const pal = PALETTES[style] || PALETTES.cute;
+  const root = parseSvg(`<svg xmlns="http://www.w3.org/2000/svg">${markup}</svg>`);
+  if (!root) return markup;
+  return serializeKids(root, n => pal[(n * 7 + 3) % pal.length], { n: 0, shapes: 0 });
+}
+function artSvg(markup, { sw = 5, w = "100%", h = "100%", bg = null } = {}) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="${w}" height="${h}">${bg ? `<rect width="400" height="400" fill="${bg}"/>` : ""}<g fill="white" stroke="${INK}" stroke-width="${sw}" stroke-linejoin="round" stroke-linecap="round">${markup}</g></svg>`;
+}
+function artGroup(markup, x, y, size, sw = 5) {
+  const s = size / 400;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g fill="white" stroke="${INK}" stroke-width="${sw}" stroke-linejoin="round" stroke-linecap="round">${markup}</g></g>`;
+}
+
+/* ---- Claude prompts ---- */
+const STYLE_EN = { cute: "cute and friendly, rounded shapes, smiling faces", funny: "funny and silly, exaggerated features", cool: "cool and dynamic, bold confident shapes", real: "realistic proportions, still simple enough to color", crazy: "wild and surprising, playful odd details", mystery: "mysterious and calm, night or hidden details" };
+const DETAIL = {
+  1: { d: "very simple: a few big shapes, thick friendly regions, almost no small details", min: 8, max: 20 },
+  2: { d: "simple: clear big shapes with a few details", min: 14, max: 32 },
+  3: { d: "moderate detail: a small scene around the subject", min: 24, max: 48 },
+  4: { d: "rich detail: a full scene with many small regions to color", min: 38, max: 75 }
+};
+async function aiLineArt(topic, level, style) {
+  const sample = await getSample();
+  if (!sample) return null;
+  const det = DETAIL[level];
+  const prompt = `You draw original children's coloring-page line art as SVG.
+Subject (written in Hebrew, understand it yourself): "${topic}"
+Style: ${STYLE_EN[style] || STYLE_EN.cute}. Detail: ${det.d}.
+Rules:
+- Reply with ONLY one <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"> element and nothing else.
+- Use only g, path, circle, ellipse, rect, polygon, polyline, line. No text, no defs, no gradients, no style, no images, no clip paths.
+- Do not set any stroke attributes; strokes are applied for you. Every closed shape gets fill="white". Open strokes get fill="none". Tiny solid details such as pupils may use fill="#2A2F2E".
+- Later elements are painted over earlier ones, so draw background first, then the subject, then its details.
+- The subject is centered and fills about 70% of the canvas, built from large closed regions a child can color. Add a ground line or a few simple background elements.
+- Between ${det.min} and ${det.max} elements. Keep coordinates between 12 and 388.
+- No brand characters, logos or letters.`;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const { text } = await sample(prompt, { modelTier: "default", cache: false });
+      const s = sanitizeSvg(text);
+      if (s && s.shapes >= 4) return s.markup;
+    } catch (e) {
+      if (HARD_STOP.includes(e && e.code)) { CAP.sample = null; return null; }
+      if (e && (e.code === "rate_limited" || e.code === "refused")) return null;
+    }
+  }
+  return null;
+}
+
+/* ---- Connect-the-dots geometry ---- */
+const DOT_TARGET = { 1: 12, 2: 20, 3: 30, 4: 44 };
+const DOT_MIN = { 1: 9, 2: 15, 3: 24, 4: 34 };
+const DOT_GAP = { 1: 6, 2: 4.6, 3: 3.6, 4: 2.8 };
+function segX(a, b, c, d) {
+  const o = (p, q, r) => Math.sign((q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0]));
+  return o(a, b, c) * o(a, b, d) < 0 && o(c, d, a) * o(c, d, b) < 0;
+}
+function selfCross(p) {
+  const n = p.length;
+  for (let i = 0; i < n; i++) for (let j = i + 2; j < n; j++) {
+    if (i === 0 && j === n - 1) continue;
+    if (segX(p[i], p[(i + 1) % n], p[j], p[(j + 1) % n])) return [i, j];
+  }
+  return null;
+}
+function area(p) { let s = 0; for (let i = 0; i < p.length; i++) { const a = p[i], b = p[(i + 1) % p.length]; s += a[0] * b[1] - b[0] * a[1]; } return s / 2; }
+function fitBox(p, lo = 8, hi = 92) {
+  const xs = p.map(q => q[0]), ys = p.map(q => q[1]);
+  const minx = Math.min(...xs), maxx = Math.max(...xs), miny = Math.min(...ys), maxy = Math.max(...ys);
+  const s = (hi - lo) / Math.max(maxx - minx, maxy - miny, 1e-6);
+  const ox = lo + ((hi - lo) - (maxx - minx) * s) / 2, oy = lo + ((hi - lo) - (maxy - miny) * s) / 2;
+  return p.map(q => [ox + (q[0] - minx) * s, oy + (q[1] - miny) * s]);
+}
+function resample(p, n) {
+  const segs = []; let L = 0;
+  for (let i = 0; i < p.length; i++) { const a = p[i], b = p[(i + 1) % p.length]; const l = Math.hypot(b[0] - a[0], b[1] - a[1]); segs.push([a, b, l]); L += l; }
+  const step = L / n, out = []; let si = 0, acc = 0;
+  for (let k = 0; k < n; k++) {
+    const t = k * step;
+    while (si < segs.length - 1 && acc + segs[si][2] < t) { acc += segs[si][2]; si++; }
+    const [a, b, l] = segs[si], u = l ? (t - acc) / l : 0;
+    out.push([a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u]);
+  }
+  return out;
+}
+function minGap(p) { let m = 1e9; for (let i = 0; i < p.length; i++) for (let j = i + 1; j < p.length; j++) m = Math.min(m, Math.hypot(p[i][0] - p[j][0], p[i][1] - p[j][1])); return m; }
+/* returns {points, outline} or {error} */
+function buildDots(raw, level) {
+  if (!Array.isArray(raw) || raw.length < 6) return { error: "Too few points. Give 18 to 40 points." };
+  let p = raw.map(q => Array.isArray(q) ? [Number(q[0]), Number(q[1])] : [Number(q && q.x), Number(q && q.y)]);
+  if (p.some(q => !isFinite(q[0]) || !isFinite(q[1]))) return { error: "Every point must be [x, y] numbers." };
+  p = p.filter((q, i) => i === 0 || Math.hypot(q[0] - p[i - 1][0], q[1] - p[i - 1][1]) > 0.01);
+  if (Math.hypot(p[0][0] - p[p.length - 1][0], p[0][1] - p[p.length - 1][1]) < 0.5) p.pop();
+  p = fitBox(p);
+  if (area(p) < 0) p.reverse();
+  if (Math.abs(area(p)) < 500) return { error: "The outline is too thin or flat; make a fuller silhouette." };
+  const x = selfCross(p);
+  if (x) return { error: `The outline crosses itself between point ${x[0] + 1} and point ${x[1] + 1}. Give a single non-crossing contour.` };
+  for (let n = DOT_TARGET[level]; n >= DOT_MIN[level]; n -= 1) {
+    const r = resample(p, n);
+    if (selfCross(r)) continue;
+    if (minGap(r) < DOT_GAP[level]) continue;
+    return { points: r.map(q => [+q[0].toFixed(2), +q[1].toFixed(2)]), outline: p.map(q => [+q[0].toFixed(2), +q[1].toFixed(2)]) };
+  }
+  return { error: "Some parts of the outline are too narrow, so dots end up too close together. Make narrow parts (legs, tails, ears) wider, at least 8 units across." };
+}
+async function aiDots(topic, level, style, onStatus) {
+  const sample = await getSample();
+  if (!sample) return null;
+  const base = `Give the outer silhouette outline of "${topic}" (the subject is written in Hebrew; understand it yourself) for a children's connect-the-dots page.
+Reply with only JSON: {"points": [[x, y], ...]}
+- 20 to 40 points, coordinates from 0 to 100, y grows downward.
+- One closed outer contour, in order around the shape, the first point not repeated at the end.
+- The contour never crosses itself. Only the outer silhouette, no inner details or holes.
+- Recognizable side or front view, filling most of the square. Narrow parts (legs, tails, ears, antennae) must stay at least 8 units wide.
+- Style: ${STYLE_EN[style] || STYLE_EN.cute}.`;
+  let msgs = [{ role: "user", content: base }];
+  for (let attempt = 1; attempt <= 4; attempt++) {
+    onStatus && onStatus(attempt);
+    let res;
+    try { res = await sample.json(msgs, { modelTier: "default", cache: false }); }
+    catch (e) {
+      if (HARD_STOP.includes(e && e.code)) { CAP.sample = null; return null; }
+      if (e && (e.code === "rate_limited" || e.code === "refused")) return null;
+      continue;
+    }
+    const out = buildDots(res && res.points, level);
+    if (out.points) return out;
+    msgs = [...msgs, { role: "assistant", content: JSON.stringify(res).slice(0, 4000) }, { role: "user", content: `That outline failed a check: ${out.error} Reply with corrected JSON only.` }];
+  }
+  return null;
+}
+function localDots(theme, level) {
+  for (const key of [theme.dots, "star", "heart"]) {
+    const r = buildDots(DOT_SHAPES[key], level);
+    if (r.points) return r;
+  }
+  return buildDots(DOT_SHAPES.heart, 1);
+}
+function outlineMarkup(outline) {
+  return `<polygon points="${outline.map(q => (q[0] * 4).toFixed(1) + "," + (q[1] * 4).toFixed(1)).join(" ")}"/>`;
+}
+
+/* ---- Maze ---- */
+const MAZE_SIZE = { 1: [6, 6], 2: [9, 9], 3: [12, 13], 4: [16, 18] };
+/* cells: walls bitmask N=1 E=2 S=4 W=8 */
+function makeMaze(w, h) {
+  const c = new Array(w * h).fill(15), seen = new Uint8Array(w * h);
+  const stack = [[w - 1, 0]]; seen[w - 1] = 1;
+  const D = [[0, -1, 1, 4], [1, 0, 2, 8], [0, 1, 4, 1], [-1, 0, 8, 2]];
+  while (stack.length) {
+    const [x, y] = stack[stack.length - 1];
+    const opts = D.filter(([dx, dy]) => { const nx = x + dx, ny = y + dy; return nx >= 0 && ny >= 0 && nx < w && ny < h && !seen[ny * w + nx]; });
+    if (!opts.length) { stack.pop(); continue; }
+    const [dx, dy, b, ob] = pick(opts), nx = x + dx, ny = y + dy;
+    c[y * w + x] &= ~b; c[ny * w + nx] &= ~ob; seen[ny * w + nx] = 1; stack.push([nx, ny]);
+  }
+  return { w, h, cells: c.map(v => v.toString(16)).join(""), start: [w - 1, 0], end: [0, h - 1] };
+}
+function mazeCells(m) { return m.cells.split("").map(ch => parseInt(ch, 16)); }
+function mazeWalls(m, ox, oy, cs) {
+  const c = mazeCells(m); let d = "";
+  for (let y = 0; y < m.h; y++) for (let x = 0; x < m.w; x++) {
+    const v = c[y * m.w + x], X = ox + x * cs, Y = oy + y * cs;
+    if (v & 1 && !(x === m.start[0] && y === m.start[1])) d += `M${X} ${Y}h${cs}`;
+    if (v & 8) d += `M${X} ${Y}v${cs}`;
+    if (y === m.h - 1 && v & 4 && !(x === m.end[0] && y === m.end[1])) d += `M${X} ${Y + cs}h${cs}`;
+    if (x === m.w - 1 && v & 2) d += `M${X + cs} ${Y}v${cs}`;
+  }
+  return d;
+}
+
+/* ---- Math & letters for the typing game ---- */
+function mathItem(level) {
+  let a, b, op;
+  if (level === 1) { a = rnd(1, 5); b = rnd(1, 5); op = "+"; }
+  else if (level === 2) { op = pick(["+", "-"]); a = rnd(3, 15); b = rnd(1, op === "-" ? a : 10); }
+  else if (level === 3) { op = pick(["+", "-", "×"]); if (op === "×") { a = rnd(2, 5); b = rnd(2, 10); } else { a = rnd(10, 60); b = rnd(1, op === "-" ? a : 40); } }
+  else { op = pick(["×", "×", "-", "+"]); if (op === "×") { a = rnd(3, 10); b = rnd(3, 10); } else { a = rnd(20, 99); b = rnd(5, op === "-" ? a : 99); } }
+  const ans = op === "+" ? a + b : op === "-" ? a - b : a * b;
+  return { show: `${a} ${op} ${b}`, answer: String(ans) };
+}
+const LETTERS = "אבגדהוזחטיכלמנסעפצקרשת".split("");
+
+/* ---- The main generator ---- */
+async function generateActivity(o, onStatus) {
+  const theme = themeFor(o.topic);
+  const a = {
+    id: uid(), title: o.topic, category: o.category || null, prompt: o.topic, type: o.type, level: o.level, style: o.style,
+    emoji: theme.e, imageColor: null, imageLines: null, data: {}, dotCount: 0, createdAt: Date.now(), source: "local"
+  };
+  if (o.type === "coloring" || o.type === "paint" || o.type === "grid") {
+    let markup = o.linesOverride || null;
+    if (!markup) { markup = await aiLineArt(o.topic, o.level, o.style); if (markup) a.source = "ai"; }
+    if (!markup) markup = LINE_ART[theme.art];
+    a.imageLines = markup; a.imageColor = colorize(markup, o.style);
+    if (o.type === "grid") a.data.n = [4, 6, 8, 10][o.level - 1];
+  } else if (o.type === "dots") {
+    let r = await aiDots(o.topic, o.level, o.style, onStatus);
+    if (r) a.source = "ai"; else r = localDots(theme, o.level);
+    a.data = { points: r.points, outline: r.outline };
+    a.dotCount = r.points.length;
+    a.imageLines = outlineMarkup(r.outline);
+    a.imageColor = colorize(a.imageLines, o.style);
+  } else if (o.type === "maze") {
+    const [w, h] = MAZE_SIZE[o.level];
+    a.data = makeMaze(w, h);
+  } else if (o.type === "typing") {
+    a.data = { words: shuffle(WORDS[o.level]).slice(0, 12) };
+  }
+  if (theme.guessed && a.source === "local" && (o.type !== "maze" && o.type !== "typing")) a.data.localArt = true;
+  return a;
+}
+
+/* ---- A4 sheet (1000 × 1414) ---- */
+function typeName(id) { return (TYPES.find(t => t.id === id) || {}).name || ""; }
+function sheetSVG(a, mode = "color", forImage = false) {
+  const color = mode === "color";
+  const F = forImage ? "Arial, sans-serif" : "Rubik, Heebo, Arial, sans-serif";
+  const lvl = LEVELS[a.level - 1] || LEVELS[0];
+  let body = "";
+  const T = (x, y, s, txt, extra = "") => `<text x="${x}" y="${y}" font-family="${F}" font-size="${s}" text-anchor="middle" fill="${INK}" ${extra}>${esc(txt)}</text>`;
+  if (a.type === "coloring" || a.type === "paint") {
+    body += artGroup(a.imageLines, 90, 250, 820, 4.5);
+    if (color) body += `<g>${artGroup(a.imageColor, 790, 1130, 150, 6)}<rect x="790" y="1130" width="150" height="150" rx="14" fill="none" stroke="#C9C2B4" stroke-width="2"/>${T(865, 1306, 20, "דוגמה")}</g>`;
+    body += T(500, 1110 + (color ? 0 : 60), 26, "צובעים בעדינות, אפשר גם לצייר רקע משלכם", `fill="#6E716C"`);
+  } else if (a.type === "dots") {
+    const s = 8.4, ox = 80, oy = 250, pts = a.data.points, n = pts.length;
+    const sz = n > 34 ? 18 : n > 22 ? 21 : 25, r = n > 34 ? 5 : 6.5;
+    const cw = area(pts) >= 0;
+    pts.forEach((p, i) => {
+      const X = ox + p[0] * s, Y = oy + p[1] * s;
+      const pr = pts[(i - 1 + n) % n], nx = pts[(i + 1) % n];
+      let dx = nx[0] - pr[0], dy = nx[1] - pr[1]; const L = Math.hypot(dx, dy) || 1;
+      let nxv = dy / L, nyv = -dx / L; if (!cw) { nxv = -nxv; nyv = -nyv; }
+      const lx = X - nxv * (sz * 0.95), ly = Y - nyv * (sz * 0.95) + sz * 0.35;
+      body += `<circle cx="${X.toFixed(1)}" cy="${Y.toFixed(1)}" r="${i === 0 ? r + 3 : r}" fill="${i === 0 && color ? "#3C7A71" : INK}"/>`;
+      body += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" font-family="${F}" font-size="${sz}" text-anchor="middle" fill="${INK}">${i + 1}</text>`;
+    });
+    body += T(500, 1150, 28, `מחברים את הנקודות מ־1 עד ${n} ומגלים ציור`, `fill="#6E716C"`);
+    body += T(500, 1196, 24, "בסוף מחברים את הנקודה האחרונה ל־1, ואז צובעים", `fill="#6E716C"`);
+  } else if (a.type === "maze") {
+    const m = a.data, maxW = 820, maxH = 900, cs = Math.floor(Math.min(maxW / m.w, maxH / m.h));
+    const W = cs * m.w, H = cs * m.h, ox = (1000 - W) / 2, oy = 290;
+    if (color) body += `<rect x="${ox}" y="${oy}" width="${W}" height="${H}" fill="#F7F2E8"/>`;
+    body += `<path d="${mazeWalls(m, ox, oy, cs)}" stroke="${INK}" stroke-width="${Math.max(4, cs / 9).toFixed(1)}" stroke-linecap="round" fill="none"/>`;
+    const sx = ox + (m.start[0] + .5) * cs, ex = ox + (m.end[0] + .5) * cs;
+    body += `<text x="${sx}" y="${oy - 18}" font-size="${Math.min(56, cs * .9)}" text-anchor="middle">${a.emoji}</text>`;
+    body += T(sx, oy - 74, 24, "התחלה", `font-weight="600"`);
+    body += T(ex, oy + H + 44, 26, "🏁 יעד", `font-weight="600"`);
+    body += T(500, oy + H + 100, 24, "מעבירים קו מההתחלה ועד היעד בלי לחצות קירות", `fill="#6E716C"`);
+  } else if (a.type === "grid") {
+    const n = a.data.n, ex = 330, ey = 230, es = 340;
+    body += `<rect x="${ex}" y="${ey}" width="${es}" height="${es}" fill="#fff"/>` + artGroup(color ? a.imageColor : a.imageLines, ex, ey, es, 6);
+    let gl = ""; for (let i = 0; i <= n; i++) { const t = i * es / n; gl += `M${ex + t} ${ey}v${es}M${ex} ${ey + t}h${es}`; }
+    body += `<path d="${gl}" stroke="${color ? "#3C7A71" : "#888"}" stroke-width="1.6" fill="none"/>`;
+    body += T(500, ey + es + 40, 24, "מעתיקים כל ריבוע לריבוע המתאים ברשת הגדולה", `fill="#6E716C"`);
+    const gx = 160, gy = 640, gs = 680; let g2 = "";
+    for (let i = 0; i <= n; i++) { const t = i * gs / n; g2 += `M${gx + t} ${gy}v${gs}M${gx} ${gy + t}h${gs}`; }
+    body += `<path d="${g2}" stroke="${color ? "#3C7A71" : "#777"}" stroke-width="2" fill="none"/>`;
+    if (n <= 6) for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) body += `<text x="${gx + gs - (c + .5) * gs / n}" y="${gy + (r + .5) * gs / n + 8}" font-family="${F}" font-size="20" fill="#C9C2B4" text-anchor="middle">${String.fromCharCode(1488 + r)}${c + 1}</text>`;
+  } else if (a.type === "typing") {
+    const w = a.data.words;
+    body += T(500, 260, 28, "קוראים את המילה ומעתיקים אותה על הקו", `fill="#6E716C"`);
+    w.forEach((word, i) => {
+      const col = i % 2, row = Math.floor(i / 2), x = col ? 270 : 730, y = 360 + row * 150;
+      body += T(x, y, 46, word, `font-weight="600" fill="${color ? "#3C7A71" : INK}"`);
+      body += `<path d="M${x - 170} ${y + 70}h340" stroke="#9A958A" stroke-width="2" stroke-dasharray="8 8"/>`;
+    });
+  }
+  const head = `<rect x="24" y="24" width="952" height="1366" rx="28" fill="none" stroke="${color ? "#3C7A71" : "#555"}" stroke-width="3"/>
+    <text x="930" y="84" font-family="${F}" font-size="24" direction="rtl" text-anchor="start" fill="${INK}">שם: ____________</text>
+    <text x="70" y="84" font-family="${F}" font-size="30" direction="ltr" text-anchor="start" fill="${INK}">${a.type === "maze" || a.type === "typing" ? "" : esc(a.emoji)}</text>
+    ${T(500, 150, 54, a.title, `font-weight="600"`)}
+    ${T(500, 196, 24, `${typeName(a.type)} · ${lvl.name} ${lvl.ages}`, `fill="#6E716C"`)}`;
+  const foot = T(500, 1366, 18, "דפי פעילות · pearlsmanOG", `fill="#9A958A"`);
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1414" width="100%" height="100%"><rect width="1000" height="1414" fill="#fff"/>${head}${body}${foot}</svg>`;
+}
+
+/* ---- rasterize SVG to canvas/blob ---- */
+function svgToImage(svg) {
+  return new Promise((res, rej) => {
+    const img = new Image();
+    img.onload = () => res(img);
+    img.onerror = rej;
+    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+  });
+}
+async function svgToPngBlob(svg, w, h) {
+  const img = await svgToImage(svg);
+  const c = document.createElement("canvas"); c.width = w; c.height = h;
+  const x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, w, h); x.drawImage(img, 0, 0, w, h);
+  return await new Promise(r => c.toBlob(r, "image/png"));
+}
+async function offerDownload(blob, filename) {
+  await capReady;
+  if (!CAP.downloads) {
+    try {
+      const url = URL.createObjectURL(blob), a = document.createElement("a");
+      a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+    } catch (e) { toast("השמירה לא הצליחה, אפשר לנסות שוב"); }
+    return;
+  }
+  try { await CAP.downloads.save({ filename, data: blob }); toast("נשמר"); }
+  catch (e) { if (e && e.code !== "declined") toast("השמירה לא הצליחה, אפשר לנסות שוב"); }
+}
+
+/* ===== App: routing, screens, games ===== */
+const LINKS = {
+  lands: "https://world-kids-quest.base44.app",
+  globie: "https://globie-journey-go.base44.app",
+  typing: "https://orenpearlsman-create.github.io/space-typing-game/index.html",
+  mail: "hayadat.hayadata@gmail.com"
+};
+const app = document.getElementById("app");
+let CLEAN = [];
+function onCleanup(fn) { CLEAN.push(fn); }
+function runCleanup() { for (const f of CLEAN) { try { f(); } catch (e) { } } CLEAN = []; }
+function toast(msg) {
+  const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; t.setAttribute("role", "status");
+  document.body.appendChild(t); setTimeout(() => t.remove(), 3200);
+}
+function getProfile() { return LS.get("kidProfile", null); }
+function levelFromAge(age) { return age <= 6 ? 1 : age <= 8 ? 2 : age <= 10 ? 3 : 4; }
+function profileLevel() { const p = getProfile(); return p ? p.level : 2; }
+function go(h) { if (location.hash.slice(1) === h) route(); else location.hash = h; }
+const $ = (s, el = app) => el.querySelector(s);
+const $$ = (s, el = app) => [...el.querySelectorAll(s)];
+
+function topbar(back = true) {
+  const p = getProfile();
+  return `<header class="topbar">
+    ${back ? `<a class="back" href="#">→ לשביל</a>` : `<a class="brandmark" href="#"><svg width="34" height="34" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="54" fill="#E3EEEB"/><path d="M30 84 C46 60 74 70 90 36" fill="none" stroke="#3C7A71" stroke-width="7" stroke-dasharray="2 12" stroke-linecap="round"/><circle cx="90" cy="36" r="9" fill="#E9A23B"/></svg><b>דפי פעילות</b></a>`}
+    ${p ? `<div class="who"><span class="av" aria-hidden="true">${p.avatar}</span><span>${esc(p.name)}</span><button class="linkbtn" data-notme>לא אני</button></div>` : ""}
+  </header>`;
+}
+function bindTop() {
+  const b = $("[data-notme]");
+  if (b) b.onclick = () => { try { localStorage.removeItem("kidProfile"); } catch (e) { } go(""); };
+}
+
+/* ---------- router ---------- */
+async function route() {
+  runCleanup();
+  window.scrollTo(0, 0);
+  const h = decodeURIComponent(location.hash.slice(1));
+  document.body.classList.toggle("is-print", h.startsWith("print-"));
+  if (h === "parents") return viewParents();
+  if (h === "create") return viewCreate();
+  if (h.startsWith("world-")) return viewWorld(h.slice(6));
+  if (h.startsWith("activity-")) return viewActivity(h.slice(9));
+  if (h.startsWith("print-")) return viewPrint(h.slice(6));
+  if (h === "play-typing") return viewTypingStation();
+  if (!getProfile()) return viewWelcome();
+  return viewPath();
+}
+window.addEventListener("hashchange", route);
+
+/* ---------- welcome: who is playing ---------- */
+function viewWelcome() {
+  const st = { name: "", avatar: AVATARS[0], age: null };
+  app.innerHTML = `<div class="welcome stack">
+    <div style="text-align:center" class="stack">
+      <div style="width:110px;height:110px;margin:0 auto">${STATION_ART.globie}</div>
+      <h1>מי משחק היום?</h1>
+      <p class="muted">נכיר רגע, וכך נדע איזה שביל להכין לך</p>
+    </div>
+    <div class="card stack">
+      <div><label class="lbl" for="kidName">איך קוראים לך?</label><input id="kidName" class="field" maxlength="20" autocomplete="off" placeholder="השם שלי"></div>
+      <div><span class="lbl">בחרו חיה</span><div class="avatars">${AVATARS.map((a, i) => `<button class="avatar" aria-pressed="${i === 0}" data-av="${a}" aria-label="אווטאר ${i + 1}">${a}</button>`).join("")}</div></div>
+      <div><span class="lbl">בן/בת כמה?</span><div class="chips">${[4, 5, 6, 7, 8, 9, 10, 11].map(n => `<button class="chip" aria-pressed="false" data-age="${n}">${n === 11 ? "11+" : n}</button>`).join("")}</div></div>
+    </div>
+    <div style="text-align:center"><button class="btn primary" id="go" disabled>יאללה, מתחילים</button></div>
+  </div>`;
+  const upd = () => { $("#go").disabled = !(st.name.trim() && st.age); };
+  $("#kidName").oninput = e => { st.name = e.target.value; upd(); };
+  $$("[data-av]").forEach(b => b.onclick = () => { st.avatar = b.dataset.av; $$("[data-av]").forEach(x => x.setAttribute("aria-pressed", x === b)); });
+  $$("[data-age]").forEach(b => b.onclick = () => { st.age = +b.dataset.age; $$("[data-age]").forEach(x => x.setAttribute("aria-pressed", x === b)); upd(); });
+  $("#go").onclick = () => { LS.set("kidProfile", { name: st.name.trim(), avatar: st.avatar, age: st.age, level: levelFromAge(st.age) }); go(""); };
+}
+
+/* ---------- the path ---------- */
+const STATIONS = [
+  { n: 1, w: "צביעה", art: "color", act: () => startCreate({ type: "coloring" }) },
+  { n: 2, w: "נקודות", art: "dots", act: () => startCreate({ type: "dots" }) },
+  { n: 3, w: "מבוך", art: "maze", act: () => startCreate({ type: "maze" }) },
+  { n: 4, w: "אותיות וחשבון", art: "letters", act: () => go("play-typing") },
+  { n: 5, w: "ארצות", art: "lands", href: LINKS.lands },
+  { n: 6, w: "גלובי", art: "globie", href: LINKS.globie }
+];
+function viewPath() {
+  const p = getProfile();
+  const rec = getRecent();
+  const hour = new Date().getHours();
+  const hi = hour < 12 ? "בוקר טוב" : hour < 18 ? "שלום" : "ערב טוב";
+  app.innerHTML = `${topbar(false)}<main class="wrap">
+    <div class="hello"><h1>${hi}, ${esc(p.name)}</h1><p>לאן הולכים היום בשביל?</p></div>
+    <div class="trail" id="trail"><svg class="road" id="road" aria-hidden="true"></svg>
+      ${STATIONS.map((s, i) => {
+        const side = i % 2 ? "left" : "right";
+        const inner = `<span class="art">${STATION_ART[s.art]}</span><span class="num">${s.n}</span><span class="word">${s.w}</span>${s.href ? `<span class="ext">נפתח בחלון חדש ↗</span>` : ""}`;
+        return s.href ? `<a class="station ${side}" href="${s.href}" target="_blank" rel="noopener">${inner}</a>` : `<button class="station ${side}" data-st="${i}">${inner}</button>`;
+      }).join("")}
+    </div>
+    ${rec.length ? `<section class="mine"><h3>הפעילויות שלי</h3><div class="mineRow">${rec.map(r => `<a class="mineItem" href="#activity-${esc(r.id)}"><span class="e">${esc(r.emoji)}</span><span class="t">${esc(r.title)}</span></a>`).join("")}</div></section>` : ""}
+    <footer class="footer">
+      <a class="btn" href="#parents">להורים</a>
+      <a class="btn small" href="mailto:${LINKS.mail}?subject=${encodeURIComponent("הצעה לשיפור")}">יש לכם הצעות לשיפור? שלחו לנו מייל</a>
+      <span class="small muted">${LINKS.mail}</span>
+      <span class="copy">© ${new Date().getFullYear()} pearlsmanOG · כל הזכויות שמורות</span>
+    </footer>
+  </main>`;
+  bindTop();
+  $$("[data-st]").forEach(b => b.onclick = () => STATIONS[+b.dataset.st].act());
+  const draw = () => {
+    const tr = $("#trail"), road = $("#road"); if (!tr || !road) return;
+    const tb = tr.getBoundingClientRect();
+    const pts = $$(".station .art", tr).map(el => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2 - tb.left, r.top + r.height / 2 - tb.top]; });
+    let d = `M${pts[0][0]} ${pts[0][1]}`;
+    for (let i = 1; i < pts.length; i++) { const [x0, y0] = pts[i - 1], [x1, y1] = pts[i], my = (y0 + y1) / 2; d += ` C${x0} ${my} ${x1} ${my} ${x1} ${y1}`; }
+    road.setAttribute("viewBox", `0 0 ${tb.width} ${tb.height}`);
+    road.innerHTML = `<path d="${d}" fill="none" stroke="#E6DCC8" stroke-width="16" stroke-linecap="round"/><path d="${d}" fill="none" stroke="#3C7A71" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round" opacity=".7"/>`;
+  };
+  requestAnimationFrame(draw);
+  window.addEventListener("resize", draw); onCleanup(() => window.removeEventListener("resize", draw));
+  if (document.fonts) document.fonts.ready.then(draw);
+  // drop recents that no longer exist
+  rec.forEach(async r => { if (!(await getActivity(r.id))) { removeRecent(r.id); const el = $(`.mineItem[href="#activity-${r.id}"]`); if (el) el.remove(); } });
+}
+
+/* ---------- create ---------- */
+let CS = null;
+function startCreate(o = {}) {
+  CS = { step: o.topic ? (o.type ? 3 : 2) : 1, topic: o.topic || "", type: o.type || null, world: o.world || null, level: o.level || profileLevel(), style: o.style || "cute", category: o.category || null, presetType: !!o.type };
+  go("create");
+}
+function viewCreate() {
+  if (!CS) CS = { step: 1, topic: "", type: null, world: null, level: profileLevel(), style: "cute", category: null };
+  const types = CS.world ? TYPES.filter(t => WORLDS[CS.world].types.includes(t.id)) : TYPES;
+  const head = `${topbar()}<main class="wrap narrow">
+    <h1>${CS.type && CS.presetType ? `יוצרים ${typeName(CS.type)}` : "יוצרים פעילות חדשה"}</h1>
+    ${CS.world ? `<p class="muted">עולם ה${WORLDS[CS.world].name}</p>` : ""}
+    <div class="steps" aria-label="שלב ${CS.step} מתוך 3">${[1, 2, 3].map(i => `<span class="${i <= CS.step ? "on" : ""}"></span>`).join("")}</div>`;
+  let body = "";
+  if (CS.step === 1) {
+    body = `<div class="card stack">
+      <label class="lbl" for="topic">על מה תהיה הפעילות?</label>
+      <input id="topic" class="field" maxlength="60" placeholder="למשל: דינוזאור שאוכל גלידה" value="${esc(CS.topic)}">
+      <div class="row"><button class="btn" id="surprise">🎲 תפתיעו אותי</button></div>
+      <div><span class="small muted">רעיונות:</span><div class="chips" style="margin-top:6px">${shuffle(IDEAS[CS.level]).slice(0, 4).map(t => `<button class="chip" data-idea="${esc(t)}">${esc(t)}</button>`).join("")}</div></div>
+    </div>`;
+  } else if (CS.step === 2) {
+    body = `<div class="stack"><h2>איזו פעילות?</h2><p class="muted">הנושא: ${esc(CS.topic)}</p>
+      <div class="types">${types.map(t => `<button class="typeCard" data-type="${t.id}" aria-pressed="${CS.type === t.id}">${TYPE_ICON[t.id]}<b>${t.name}</b><small>${t.d}</small></button>`).join("")}</div></div>`;
+  } else {
+    body = `<div class="stack"><h2>רמה וסגנון</h2>
+      <div class="levels">${LEVELS.map(l => `<button class="lvl" data-lvl="${l.id}" aria-pressed="${CS.level === l.id}"><b>${l.name}</b><small>גילאי ${l.ages}</small></button>`).join("")}</div>
+      <div class="chips" style="margin-top:6px">${STYLES.map(s => `<button class="chip" data-style="${s.id}" aria-pressed="${CS.style === s.id}"><span aria-hidden="true">${s.e}</span>${s.name}</button>`).join("")}</div>
+      <p class="small muted">${esc(CS.topic)} · ${typeName(CS.type)}</p></div>`;
+  }
+  const canNext = CS.step === 1 ? !!CS.topic.trim() : CS.step === 2 ? !!CS.type : true;
+  app.innerHTML = head + body + `<div class="actions">
+      ${CS.step > 1 ? `<button class="btn" id="prev">חזרה</button>` : `<span></span>`}
+      <button class="btn primary" id="next" ${canNext ? "" : "disabled"}>${CS.step === 3 ? "ליצור את הפעילות" : "הלאה"}</button>
+    </div></main>`;
+  bindTop();
+  const next = $("#next");
+  if (CS.step === 1) {
+    const inp = $("#topic");
+    inp.oninput = () => { CS.topic = inp.value; next.disabled = !CS.topic.trim(); };
+    inp.onkeydown = e => { if (e.key === "Enter" && CS.topic.trim()) next.click(); };
+    $("#surprise").onclick = () => {
+      const p = getProfile(); let t = pick(IDEAS[CS.level]);
+      if (p && Math.random() < .35) t = `${t} של ${p.name}`;
+      CS.topic = t; inp.value = t; next.disabled = false; inp.focus();
+    };
+    $$("[data-idea]").forEach(b => b.onclick = () => { CS.topic = b.dataset.idea; inp.value = CS.topic; next.disabled = false; });
+    setTimeout(() => inp.focus(), 50);
+  }
+  $$("[data-type]").forEach(b => b.onclick = () => { CS.type = b.dataset.type; $$("[data-type]").forEach(x => x.setAttribute("aria-pressed", x === b)); next.disabled = false; });
+  $$("[data-lvl]").forEach(b => b.onclick = () => { CS.level = +b.dataset.lvl; $$("[data-lvl]").forEach(x => x.setAttribute("aria-pressed", x === b)); });
+  $$("[data-style]").forEach(b => b.onclick = () => { CS.style = b.dataset.style; $$("[data-style]").forEach(x => x.setAttribute("aria-pressed", x === b)); });
+  if ($("#prev")) $("#prev").onclick = () => { CS.step--; if (CS.step === 2 && CS.presetType) CS.step = 1; viewCreate(); };
+  next.onclick = () => {
+    if (CS.step === 1) { CS.step = CS.type && CS.presetType ? 3 : 2; return viewCreate(); }
+    if (CS.step === 2) { CS.step = 3; return viewCreate(); }
+    runCreate({ topic: CS.topic.trim(), type: CS.type, level: CS.level, style: CS.style, category: CS.category });
+  };
+}
+const LOAD_MSG = {
+  coloring: ["מחדדים את העפרונות…", "מציירים קווים נקיים…", "משאירים מקום לצבעים שלך…", "עוד רגע הדף מוכן…"],
+  paint: ["מכינים את הבד…", "מציירים קווים נקיים…", "מסדרים את הצבעים בצנצנות…", "עוד רגע אפשר לצבוע…"],
+  dots: ["מציירים את קו המתאר…", "מסדרים את הנקודות בתור…", "בודקים שאף נקודה לא צפופה מדי…", "סופרים מאחת ועד הסוף…"],
+  maze: ["בונים קירות…", "חופרים שבילים…", "מוודאים שיש דרך ליעד…"],
+  grid: ["מציירים את הדוגמה…", "משרטטים את הרשת…", "מכינים ריבועים ריקים…"],
+  typing: ["בוחרים מילים…", "מכינים את השמיים…"]
+};
+async function runCreate(o) {
+  runCleanup();
+  const msgs = LOAD_MSG[o.type] || LOAD_MSG.coloring;
+  app.innerHTML = `${topbar()}<main class="wrap narrow"><div class="loading" role="status" aria-live="polite">
+    <svg class="pencil" viewBox="0 0 120 120" aria-hidden="true"><path class="d" d="M20 90 C40 40 60 100 80 50 S100 40 104 30" fill="none" stroke="#3C7A71" stroke-width="4" stroke-linecap="round"/><g class="p"><rect x="52" y="20" width="16" height="56" rx="3" fill="#E9A23B" stroke="${INK}" stroke-width="2.5" transform="rotate(30 60 60)"/></g></svg>
+    <p id="lm">${msgs[0]}</p><p class="small muted" id="ls"></p></div></main>`;
+  let i = 0; const iv = setInterval(() => { i = Math.min(i + 1, msgs.length - 1); const el = $("#lm"); if (el) el.textContent = msgs[i]; }, 2600);
+  try {
+    const a = await generateActivity(o, att => { const el = $("#ls"); if (el && att > 1) el.textContent = "מסדרים עוד קצת את הנקודות…"; });
+    await saveActivity(a);
+    clearInterval(iv);
+    go("activity-" + a.id);
+  } catch (e) {
+    clearInterval(iv);
+    app.innerHTML = `${topbar()}<main class="wrap narrow"><div class="card stack" style="text-align:center"><h2>משהו השתבש בדרך</h2><p class="muted">אפשר לנסות שוב, זה בדרך כלל עובד בפעם השנייה.</p><div class="row center"><button class="btn primary" id="again">לנסות שוב</button></div></div></main>`;
+    $("#again").onclick = () => runCreate(o);
+  }
+}
+
+/* ---------- activity ---------- */
+async function viewActivity(id) {
+  app.innerHTML = `${topbar()}<main class="wrap"><p class="muted" style="text-align:center;padding:40px">פותחים את הפעילות…</p></main>`;
+  bindTop();
+  const a = await getActivity(id);
+  if (!a) {
+    removeRecent(id);
+    app.innerHTML = `${topbar()}<main class="wrap narrow"><div class="card stack" style="text-align:center"><h2>הפעילות הזו כבר לא כאן</h2><p class="muted">אולי נמחקה, או שנוצרה במכשיר אחר.</p><div class="row center"><button class="btn primary" id="nw">ליצור פעילות חדשה</button></div></div></main>`;
+    bindTop(); $("#nw").onclick = () => startCreate({}); return;
+  }
+  pushRecent(a);
+  let view = "color";
+  const lvl = LEVELS[a.level - 1];
+  const render = () => {
+    runCleanup();
+    app.innerHTML = `${topbar()}<main class="wrap">
+      <div class="actHead"><span class="e" aria-hidden="true">${esc(a.emoji)}</span><div><h1>${esc(a.title)}</h1><p class="muted small">${typeName(a.type)} · ${lvl.name} ${lvl.ages}${a.data.localArt ? " · ציור מהספרייה שלנו" : ""}</p></div></div>
+      <div class="preview" id="pv">${sheetSVG(a, view)}</div>
+      <div class="toolbar"><button class="btn primary" id="play">לשחק עכשיו</button></div>
+      <div class="toolbar">
+        <a class="btn small" href="#print-${a.id}">🖨️ להדפיס</a>
+        <button class="btn small" id="new">✨ ליצור חדש</button>
+        <button class="btn small" id="view">תצוגה: ${view === "color" ? "צבעונית" : "שחור־לבן"}</button>
+      </div>
+      <div style="text-align:center;margin-top:18px"><button class="linkbtn" id="del">להסיר את הפעילות</button></div>
+    </main>`;
+    bindTop();
+    $("#play").onclick = () => playMode(a);
+    $("#new").onclick = () => startCreate({});
+    $("#view").onclick = () => { view = view === "color" ? "bw" : "color"; render(); };
+    $("#del").onclick = e => {
+      const b = e.target; if (b.dataset.sure) { deleteActivity(a.id).then(() => go("")); return; }
+      b.dataset.sure = "1"; b.textContent = "בטוח? ללחוץ שוב כדי להסיר";
+    };
+  };
+  if (AUTO_PLAY === a.id) { AUTO_PLAY = null; playMode(a); } else render();
+}
+let AUTO_PLAY = null;
+function playMode(a) {
+  runCleanup();
+  app.innerHTML = `${topbar()}<main class="wrap">
+    <div class="actHead"><span class="e" aria-hidden="true">${esc(a.emoji)}</span><div><h1>${esc(a.title)}</h1><p class="muted small">${typeName(a.type)}</p></div></div>
+    <div class="play" id="play"></div>
+    <div class="toolbar"><button class="btn small" id="back">חזרה לתצוגה</button><a class="btn small" href="#print-${a.id}">🖨️ להדפיס</a></div>
+  </main>`;
+  bindTop();
+  $("#back").onclick = () => viewActivity(a.id);
+  const box = $("#play");
+  const done = kind => celebrate(a, kind);
+  ({ dots: playDots, coloring: playPaint, paint: playPaint, maze: playMaze, grid: playGrid, typing: playTypingAct })[a.type](box, a, done);
+}
+
+/* ---------- celebration ---------- */
+function celebrate(a, info = {}) {
+  const title = a.type === "dots" ? "הצלחת!" : a.type === "maze" ? "הגעתם ליעד!" : "סיימת";
+  const sub = info.sub || (a.type === "dots" ? "גילית את הציור" : a.type === "maze" ? "מצאת את הדרך" : "איזה יופי");
+  const ov = document.createElement("div"); ov.className = "overlay"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-label", title);
+  const colors = ["#3C7A71", "#E9A23B", "#E07A6A", "#7BA7D9", "#8FC1A0"];
+  const conf = matchMedia("(prefers-reduced-motion: reduce)").matches ? "" : Array.from({ length: 22 }, (_, i) => `<i class="confetti" style="right:${rnd(2, 96)}%;background:${colors[i % 5]};animation:drop ${(1.6 + Math.random() * 1.4).toFixed(2)}s ${(Math.random() * .6).toFixed(2)}s ease-in forwards"></i>`).join("");
+  ov.innerHTML = `<div class="celebrate">${conf}
+    <div style="font-size:3rem" aria-hidden="true">${esc(a.emoji)}</div>
+    <h2>${title}</h2><p class="muted">${esc(sub)}</p>
+    <div class="acts">
+      <button class="btn primary" data-c="again">לשחק שוב</button>
+      ${a.type === "dots" ? `<button class="btn" data-c="paint">🎨 לצבוע את הציור שהתגלה</button>` : ""}
+      <button class="btn" data-c="print">🖨️ להדפיס</button>
+      <button class="btn" data-c="other">✨ ליצור גרסה אחרת</button>
+    </div></div>`;
+  document.body.appendChild(ov);
+  const close = () => ov.remove();
+  onCleanup(close);
+  ov.querySelector("[data-c=again]").focus();
+  ov.onclick = async e => {
+    const c = e.target.closest("[data-c]"); if (!c) { if (e.target === ov) close(); return; }
+    close();
+    const k = c.dataset.c;
+    if (k === "again") playMode(a);
+    if (k === "print") go("print-" + a.id);
+    if (k === "other") runCreate({ topic: a.title, type: a.type, level: a.level, style: a.style, category: a.category });
+    if (k === "paint") {
+      const n = await generateActivity({ topic: a.title, type: "paint", level: a.level, style: a.style, linesOverride: a.imageLines });
+      n.emoji = a.emoji; await saveActivity(n); AUTO_PLAY = n.id; go("activity-" + n.id);
+    }
+  };
+}
+
+/* ---------- game: connect the dots ---------- */
+function playDots(box, a, done) {
+  const pts = a.data.points, n = pts.length, S = 10;
+  const cw = area(pts) >= 0;
+  const fs = n > 34 ? 30 : n > 22 ? 36 : 42;
+  let k = 1; // next index to tap (0 already "visited")
+  const lab = pts.map((p, i) => {
+    const pr = pts[(i - 1 + n) % n], nx = pts[(i + 1) % n];
+    let dx = nx[0] - pr[0], dy = nx[1] - pr[1]; const L = Math.hypot(dx, dy) || 1;
+    let a1 = dy / L, b1 = -dx / L; if (!cw) { a1 = -a1; b1 = -b1; }
+    return [p[0] * S - a1 * fs, p[1] * S - b1 * fs + fs * .35];
+  });
+  box.innerHTML = `<div class="progress"><i id="pg"></i></div>
+    <div class="stage" id="st"><svg viewBox="0 0 1000 1000" id="sv" role="img" aria-label="חבר את הנקודות">
+      <polygon id="fillp" points="${pts.map(p => p[0] * S + "," + p[1] * S).join(" ")}" fill="${(PALETTES[a.style] || PALETTES.cute)[1]}" opacity="0" style="transition:opacity 1s"/>
+      <polyline id="ln" points="${pts[0][0] * S},${pts[0][1] * S}" fill="none" stroke="#3C7A71" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      ${pts.map((p, i) => `<g class="dot" data-i="${i}"><circle cx="${p[0] * S}" cy="${p[1] * S}" r="30" fill="transparent"/><circle class="c" cx="${p[0] * S}" cy="${p[1] * S}" r="${i === 0 ? 15 : 11}" fill="${i === 0 ? "#3C7A71" : INK}"/><text x="${lab[i][0]}" y="${lab[i][1]}" font-family="Rubik,sans-serif" font-size="${fs}" text-anchor="middle" fill="${INK}" pointer-events="none">${i + 1}</text></g>`).join("")}
+    </svg></div>
+    <p class="note" id="nt">מתחילים מ־1 (הנקודה הירוקה) ולוחצים על 2</p>`;
+  const sv = $("#sv", box), ln = $("#ln", box), pg = $("#pg", box), nt = $("#nt", box);
+  const line = [`${pts[0][0] * S},${pts[0][1] * S}`];
+  let miss = 0;
+  sv.addEventListener("click", e => {
+    const g = e.target.closest(".dot"); if (!g || k > n) return;
+    const i = +g.dataset.i;
+    const want = k % n;
+    if (i === want) {
+      line.push(`${pts[i][0] * S},${pts[i][1] * S}`); ln.setAttribute("points", line.join(" "));
+      $(".c", g).setAttribute("fill", "#3C7A71");
+      $$(".dot.hint", sv).forEach(x => x.classList.remove("hint"));
+      k++; miss = 0;
+      pg.style.width = Math.min(100, (k - 1) / n * 100) + "%";
+      nt.textContent = k <= n ? (k === n ? "ועכשיו חוזרים ל־1 כדי לסגור את הציור" : `יופי, עכשיו ${k + 1}`) : "";
+      if (k > n) { $("#fillp", sv).setAttribute("opacity", ".9"); nt.textContent = "הציור התגלה!"; setTimeout(() => done({}), 1100); }
+    } else if (i !== (k - 1) % n) {
+      miss++;
+      sv.classList.remove("shake"); void sv.getBoundingClientRect(); sv.classList.add("shake");
+      const tgt = $(`.dot[data-i="${want}"]`, sv); tgt.classList.remove("hint"); void tgt.getBoundingClientRect(); tgt.classList.add("hint");
+      nt.textContent = `כמעט. מחפשים את המספר ${want + 1}${miss > 1 ? " — הוא מהבהב" : ""}`;
+    }
+  });
+}
+
+/* ---------- game: paint online ---------- */
+const PAINT_COLORS = ["#E63946", "#F4A261", "#F9D65C", "#8AC926", "#2A9D8F", "#4D96FF", "#3A50A0", "#9B5DE5", "#F28DB2", "#8D5A3B", "#C9A27E", "#FFFFFF", "#9E9E9E", "#2A2F2E", "#BDE0FE", "#FFD6A5", "#CAFFBF", "#3C7A71"];
+async function playPaint(box, a, done) {
+  const W = 800;
+  box.innerHTML = `<div class="paintLayout">
+    <div class="row center"><span class="small muted">בד:</span>
+      <button class="chip" data-canvas="art" aria-pressed="true">הציור שלי</button>
+      <button class="chip" data-canvas="blank" aria-pressed="false">דף ריק</button></div>
+    <div class="tools">
+      <button class="btn small tool" data-tool="fill" aria-pressed="true">🪣 מילוי</button>
+      <button class="btn small tool" data-tool="brush" aria-pressed="false">🖌️ מכחול</button>
+      <button class="btn small tool" data-tool="eraser" aria-pressed="false">🧽 מחק</button>
+      <button class="btn small" data-size>עובי: בינוני</button>
+    </div>
+    <div class="canvasBox" id="cb"><canvas id="cc" width="${W}" height="${W}"></canvas><canvas id="lc" width="${W}" height="${W}" style="pointer-events:none"></canvas></div>
+    <div class="palette">${PAINT_COLORS.map((c, i) => `<button class="sw" style="background:${c}" data-col="${c}" aria-label="צבע ${i + 1}" aria-pressed="${i === 0}"></button>`).join("")}</div>
+    <div class="tools">
+      <button class="btn small" id="undo">↶ ביטול</button><button class="btn small" id="redo">↷ חזרה</button>
+      <button class="btn small" id="clr">ניקוי</button><button class="btn small" id="save">💾 שמירה למכשיר</button>
+      <button class="btn small" id="fin">סיימתי</button>
+    </div></div>`;
+  const cc = $("#cc", box), lc = $("#lc", box), cx = cc.getContext("2d", { willReadFrequently: true }), lx = lc.getContext("2d", { willReadFrequently: true });
+  let tool = "fill", color = PAINT_COLORS[0], size = 18, mask = new Uint8Array(W * W), canvasMode = "art";
+  const undo = [], redo = [];
+  const snap = () => { undo.push(cx.getImageData(0, 0, W, W)); if (undo.length > 25) undo.shift(); redo.length = 0; };
+  const loadLines = async () => {
+    lx.clearRect(0, 0, W, W); mask = new Uint8Array(W * W);
+    cx.fillStyle = "#fff"; cx.fillRect(0, 0, W, W);
+    if (canvasMode === "blank") return;
+    const img = await svgToImage(artSvg(a.imageLines, { sw: 5 }));
+    lx.drawImage(img, 0, 0, W, W);
+    const d = lx.getImageData(0, 0, W, W), p = d.data;
+    for (let i = 0; i < W * W; i++) {
+      const L = .3 * p[i * 4] + .59 * p[i * 4 + 1] + .11 * p[i * 4 + 2], A = p[i * 4 + 3];
+      const dark = A > 0 ? (255 - L) * A / 255 : 0;
+      if (dark > 60) { mask[i] = 1; p[i * 4] = 42; p[i * 4 + 1] = 47; p[i * 4 + 2] = 46; p[i * 4 + 3] = Math.min(255, dark * 1.4); }
+      else p[i * 4 + 3] = 0;
+    }
+    lx.putImageData(d, 0, 0);
+  };
+  try { await loadLines(); } catch (e) { toast("לא הצלחנו לטעון את הציור, אפשר לצבוע על דף ריק"); }
+  const hex = h => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+  const flood = (x, y) => {
+    let s = y * W + x;
+    if (mask[s]) { let best = -1; for (let r = 1; r <= 5 && best < 0; r++) for (let dy = -r; dy <= r && best < 0; dy++) for (let dx = -r; dx <= r; dx++) { const X = x + dx, Y = y + dy; if (X >= 0 && Y >= 0 && X < W && Y < W && !mask[Y * W + X]) { best = Y * W + X; break; } } if (best < 0) return; s = best; }
+    const img = cx.getImageData(0, 0, W, W), d = img.data, [r, g, b] = hex(color);
+    const seen = new Uint8Array(W * W), st = [s], filled = [];
+    while (st.length) {
+      const q = st.pop(); if (seen[q] || mask[q]) continue; seen[q] = 1; filled.push(q);
+      const qx = q % W;
+      if (qx > 0) st.push(q - 1); if (qx < W - 1) st.push(q + 1); if (q >= W) st.push(q - W); if (q < W * W - W) st.push(q + W);
+    }
+    const paint = q => { d[q * 4] = r; d[q * 4 + 1] = g; d[q * 4 + 2] = b; d[q * 4 + 3] = 255; };
+    for (const q of filled) paint(q);
+    for (const q of filled) { const qx = q % W; for (const o of [-1, 1, -W, W, -2, 2, -2 * W, 2 * W]) { const t = q + o; if (t < 0 || t >= W * W) continue; if (Math.abs((t % W) - qx) > 2) continue; if (mask[t] && !seen[t]) { seen[t] = 1; paint(t); } } }
+    cx.putImageData(img, 0, 0);
+  };
+  const pos = e => { const r = cc.getBoundingClientRect(); return [Math.floor((e.clientX - r.left) / r.width * W), Math.floor((e.clientY - r.top) / r.height * W)]; };
+  let drawing = false, last = null;
+  cc.addEventListener("pointerdown", e => {
+    e.preventDefault(); const [x, y] = pos(e); if (x < 0 || y < 0 || x >= W || y >= W) return;
+    snap();
+    if (tool === "fill") { flood(x, y); return; }
+    drawing = true; last = [x, y]; cc.setPointerCapture(e.pointerId);
+    cx.fillStyle = tool === "eraser" ? "#fff" : color; cx.beginPath(); cx.arc(x, y, size / 2, 0, Math.PI * 2); cx.fill();
+  });
+  cc.addEventListener("pointermove", e => {
+    if (!drawing) return; const [x, y] = pos(e);
+    cx.strokeStyle = tool === "eraser" ? "#fff" : color; cx.lineWidth = size; cx.lineCap = "round"; cx.lineJoin = "round";
+    cx.beginPath(); cx.moveTo(last[0], last[1]); cx.lineTo(x, y); cx.stroke(); last = [x, y];
+  });
+  const end = () => { drawing = false; };
+  cc.addEventListener("pointerup", end); cc.addEventListener("pointercancel", end);
+  $$("[data-tool]", box).forEach(b => b.onclick = () => { tool = b.dataset.tool; $$("[data-tool]", box).forEach(x => x.setAttribute("aria-pressed", x === b)); });
+  const sizes = [[8, "דק"], [18, "בינוני"], [36, "עבה"]]; let si = 1;
+  $("[data-size]", box).onclick = e => { si = (si + 1) % 3; size = sizes[si][0]; e.target.textContent = "עובי: " + sizes[si][1]; };
+  $$("[data-col]", box).forEach(b => b.onclick = () => { color = b.dataset.col; $$("[data-col]", box).forEach(x => x.setAttribute("aria-pressed", x === b)); if (tool === "eraser") $("[data-tool=fill]", box).click(); });
+  $$("[data-canvas]", box).forEach(b => b.onclick = async () => { canvasMode = b.dataset.canvas; $$("[data-canvas]", box).forEach(x => x.setAttribute("aria-pressed", x === b)); undo.length = 0; redo.length = 0; await loadLines(); if (canvasMode === "blank") $("[data-tool=brush]", box).click(); });
+  $("#undo", box).onclick = () => { if (!undo.length) return; redo.push(cx.getImageData(0, 0, W, W)); cx.putImageData(undo.pop(), 0, 0); };
+  $("#redo", box).onclick = () => { if (!redo.length) return; undo.push(cx.getImageData(0, 0, W, W)); cx.putImageData(redo.pop(), 0, 0); };
+  $("#clr", box).onclick = () => { snap(); cx.fillStyle = "#fff"; cx.fillRect(0, 0, W, W); };
+  const compose = () => new Promise(r => { const c = document.createElement("canvas"); c.width = W; c.height = W; const x = c.getContext("2d"); x.drawImage(cc, 0, 0); x.drawImage(lc, 0, 0); c.toBlob(r, "image/png"); });
+  $("#save", box).onclick = async () => offerDownload(await compose(), `${a.title}-צביעה.png`);
+  $("#fin", box).onclick = () => done({ sub: "איזה ציור צבעוני יצא" });
+}
+
+/* ---------- game: maze ---------- */
+function playMaze(box, a, done) {
+  const m = a.data, cells = mazeCells(m), cs = 60, W = m.w * cs, H = m.h * cs;
+  let [px, py] = m.start; const trail = [[px, py]]; let fin = false;
+  box.innerHTML = `<p class="note" style="margin:0 0 8px">מובילים את ${esc(a.emoji)} אל 🏁 · חצים במקלדת, כפתורים או החלקה</p>
+    <div class="stage" id="st" style="max-width:${m.w > 12 ? 600 : 520}px"><svg viewBox="-10 -10 ${W + 20} ${H + 20}" id="mz" role="img" aria-label="מבוך">
+      <rect x="0" y="0" width="${W}" height="${H}" fill="#F7F2E8" rx="6"/>
+      <polyline id="tr" fill="none" stroke="#E9A23B" stroke-width="${cs * .22}" stroke-linecap="round" stroke-linejoin="round" opacity=".7" points=""/>
+      <path d="${mazeWalls(m, 0, 0, cs)}" stroke="${INK}" stroke-width="${cs / 9}" stroke-linecap="round" fill="none"/>
+      <text x="${(m.end[0] + .5) * cs}" y="${(m.end[1] + .5) * cs + cs * .22}" font-size="${cs * .62}" text-anchor="middle">🏁</text>
+      <text id="pl" font-size="${cs * .7}" text-anchor="middle" style="transition:x .12s,y .12s"></text>
+    </svg></div>
+    <div class="dpad"><button class="up" data-d="0,-1" aria-label="למעלה">↑</button><button class="r" data-d="1,0" aria-label="ימינה">→</button><button class="dn" data-d="0,1" aria-label="למטה">↓</button><button class="l" data-d="-1,0" aria-label="שמאלה">←</button></div>`;
+  const pl = $("#pl", box), tr = $("#tr", box);
+  pl.textContent = a.emoji;
+  const draw = () => {
+    pl.setAttribute("x", (px + .5) * cs); pl.setAttribute("y", (py + .5) * cs + cs * .25);
+    tr.setAttribute("points", trail.map(([x, y]) => `${(x + .5) * cs},${(y + .5) * cs}`).join(" "));
+  };
+  draw();
+  const move = (dx, dy) => {
+    if (fin) return;
+    const v = cells[py * m.w + px];
+    const bit = dy === -1 ? 1 : dx === 1 ? 2 : dy === 1 ? 4 : 8;
+    if (v & bit) { $("#st", box).classList.remove("shake"); void box.offsetWidth; $("#st", box).classList.add("shake"); return; }
+    const nx = px + dx, ny = py + dy; if (nx < 0 || ny < 0 || nx >= m.w || ny >= m.h) return;
+    px = nx; py = ny;
+    const prev = trail[trail.length - 2];
+    if (prev && prev[0] === px && prev[1] === py) trail.pop(); else trail.push([px, py]);
+    draw();
+    if (px === m.end[0] && py === m.end[1]) { fin = true; setTimeout(() => done({}), 500); }
+  };
+  const key = e => {
+    const k = { ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0] }[e.key];
+    if (k) { e.preventDefault(); move(...k); }
+  };
+  window.addEventListener("keydown", key); onCleanup(() => window.removeEventListener("keydown", key));
+  $$("[data-d]", box).forEach(b => b.onclick = () => move(...b.dataset.d.split(",").map(Number)));
+  let sx = null, sy = null;
+  const st = $("#st", box);
+  st.addEventListener("pointerdown", e => { sx = e.clientX; sy = e.clientY; });
+  st.addEventListener("pointerup", e => {
+    if (sx === null) return; const dx = e.clientX - sx, dy = e.clientY - sy; sx = null;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < 24) return;
+    Math.abs(dx) > Math.abs(dy) ? move(Math.sign(dx), 0) : move(0, Math.sign(dy));
+  });
+}
+
+/* ---------- game: grid copy ---------- */
+async function playGrid(box, a, done) {
+  const n = a.data.n, W = 600;
+  let gl = ""; for (let i = 0; i <= n; i++) { const t = i * 400 / n; gl += `M${t} 0v400M0 ${t}h400`; }
+  box.innerHTML = `<div class="gridPair">
+    <div><div class="lab">הדוגמה</div><div class="stage"><svg viewBox="0 0 400 400"><rect width="400" height="400" fill="#fff"/>${artGroup(a.imageLines, 0, 0, 400, 5)}<path d="${gl}" stroke="#3C7A71" stroke-width="1.4" fill="none" opacity=".75"/></svg></div></div>
+    <div><div class="lab">הרשת שלך</div><div class="canvasBox" id="cb" style="max-width:none"><canvas id="gc" width="${W}" height="${W}"></canvas>
+      <svg viewBox="0 0 400 400" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"><g id="marks"></g><path d="${gl}" stroke="#3C7A71" stroke-width="1.4" fill="none" opacity=".75"/></svg></div></div>
+  </div>
+  <div class="tools" style="margin-top:12px">
+    <button class="btn small tool" data-t="pen" aria-pressed="true">✏️ עיפרון</button><button class="btn small tool" data-t="er" aria-pressed="false">🧽 מחק</button>
+    <button class="btn small" id="un">↶ ביטול</button><button class="btn small" id="cl">ניקוי</button><button class="btn small" id="sv">💾 שמירה</button>
+    <button class="btn primary" id="ck" style="padding:9px 20px;font-size:1rem">בדיקה מול הדוגמה</button>
+  </div><p class="note" id="nt">מציירים ריבוע אחרי ריבוע, כמו בדוגמה</p>`;
+  const c = $("#gc", box), x = c.getContext("2d", { willReadFrequently: true });
+  x.fillStyle = "#fff"; x.fillRect(0, 0, W, W);
+  let tool = "pen", dr = false, last = null; const und = [];
+  const pos = e => { const r = c.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * W]; };
+  c.addEventListener("pointerdown", e => { e.preventDefault(); und.push(x.getImageData(0, 0, W, W)); if (und.length > 20) und.shift(); dr = true; last = pos(e); c.setPointerCapture(e.pointerId); $("#marks", box).innerHTML = ""; });
+  c.addEventListener("pointermove", e => {
+    if (!dr) return; const p = pos(e);
+    x.strokeStyle = tool === "er" ? "#fff" : INK; x.lineWidth = tool === "er" ? 26 : 5; x.lineCap = "round"; x.lineJoin = "round";
+    x.beginPath(); x.moveTo(...last); x.lineTo(...p); x.stroke(); last = p;
+  });
+  const end = () => dr = false; c.addEventListener("pointerup", end); c.addEventListener("pointercancel", end);
+  $$("[data-t]", box).forEach(b => b.onclick = () => { tool = b.dataset.t; $$("[data-t]", box).forEach(q => q.setAttribute("aria-pressed", q === b)); });
+  $("#un", box).onclick = () => { if (und.length) x.putImageData(und.pop(), 0, 0); };
+  $("#cl", box).onclick = () => { und.push(x.getImageData(0, 0, W, W)); x.fillStyle = "#fff"; x.fillRect(0, 0, W, W); $("#marks", box).innerHTML = ""; };
+  $("#sv", box).onclick = () => c.toBlob(b => offerDownload(b, `${a.title}-העתקה.png`), "image/png");
+  const darkMap = async sw => {
+    const img = await svgToImage(artSvg(a.imageLines, { sw, bg: "#fff" }));
+    const t = document.createElement("canvas"); t.width = W; t.height = W; const tx = t.getContext("2d"); tx.drawImage(img, 0, 0, W, W);
+    const d = tx.getImageData(0, 0, W, W).data, m = new Uint8Array(W * W);
+    for (let i = 0; i < W * W; i++) m[i] = (.3 * d[i * 4] + .59 * d[i * 4 + 1] + .11 * d[i * 4 + 2]) < 150 ? 1 : 0;
+    return m;
+  };
+  let thin = null, thick = null;
+  $("#ck", box).onclick = async () => {
+    try { if (!thin) { thin = await darkMap(5); thick = await darkMap(22); } } catch (e) { toast("הבדיקה לא זמינה כרגע"); return; }
+    const kd = x.getImageData(0, 0, W, W).data, cs = W / n, bad = []; let ok = 0;
+    for (let r = 0; r < n; r++) for (let q = 0; q < n; q++) {
+      let ref = 0, kid = 0, hit = 0;
+      for (let yy = Math.floor(r * cs); yy < Math.floor((r + 1) * cs); yy += 2) for (let xx = Math.floor(q * cs); xx < Math.floor((q + 1) * cs); xx += 2) {
+        const i = yy * W + xx; if (thin[i]) ref++;
+        if (kd[i * 4] < 120) { kid++; if (thick[i]) hit++; }
+      }
+      const area2 = (cs / 2) * (cs / 2), th = area2 * .006;
+      const good = (ref < th && kid < th) || (ref >= th && kid >= th && hit / kid >= .4);
+      if (good) ok++; else bad.push([r, q]);
+    }
+    const score = ok / (n * n), s4 = 400 / n;
+    $("#marks", box).innerHTML = bad.map(([r, q]) => `<rect x="${q * s4}" y="${r * s4}" width="${s4}" height="${s4}" fill="#E9A23B" opacity=".22"/>`).join("");
+    if (score >= .72) done({ sub: "העתקה יפה, ריבוע אחרי ריבוע" });
+    else $("#nt", box).textContent = `כבר ${ok} ריבועים דומים לדוגמה. כדאי להציץ שוב בריבועים הצבועים בכתום`;
+  };
+}
+
+/* ---------- typing game (activity + station) ---------- */
+function playTypingAct(box, a, done) { typingGame(box, { mode: "words", level: a.level, words: a.data.words }, r => done({ sub: `תפסת ${r.caught} מתוך ${r.total}` })); }
+function typingGame(box, { mode, level, words }, onEnd) {
+  const total = 12, fallMs = [11000, 9000, 7500, 6200][level - 1], gap = [3200, 2700, 2300, 1900][level - 1];
+  const items = Array.from({ length: total }, (_, i) => {
+    if (mode === "math") { const m = mathItem(level); return { show: m.show, answer: m.answer }; }
+    if (mode === "letters") { const l = pick(LETTERS); return { show: l, answer: l }; }
+    const w = (words && words.length ? words : WORDS[level])[i % (words && words.length ? words.length : WORDS[level].length)];
+    return { show: w, answer: w };
+  });
+  const rows = mode === "math" ? [["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]] : KB_ROWS;
+  box.innerHTML = `<div class="sky" id="sky" aria-live="polite">${Array.from({ length: 26 }, () => `<i class="star" style="top:${rnd(2, 96)}%;right:${rnd(1, 98)}%"></i>`).join("")}</div>
+    <div class="typed" id="typed" aria-label="מה שהקלדת"></div>
+    <div class="kb" id="kb">${rows.map(r => `<div>${r.map(k => `<button data-k="${k}">${k}</button>`).join("")}</div>`).join("")}<div><button data-k="back" style="min-width:90px">⌫ מחיקה</button></div></div>
+    <p class="note small">${mode === "math" ? "מקלידים את התשובה" : "מקלידים את מה שנופל. אפשר גם במקלדת רגילה"}</p>`;
+  const sky = $("#sky", box), typed = $("#typed", box);
+  let buf = "", live = [], spawned = 0, caught = 0, missed = 0, t0 = performance.now(), raf, ended = false;
+  const H = () => sky.clientHeight;
+  const spawn = () => {
+    const it = items[spawned++]; const el = document.createElement("div"); el.className = "fall"; el.textContent = it.show;
+    el.style.right = rnd(22, 72) + "%"; sky.appendChild(el);
+    live.push({ ...it, el, born: performance.now() });
+  };
+  const finish = () => { if (ended) return; ended = true; cancelAnimationFrame(raf); setTimeout(() => onEnd({ caught, total }), 400); };
+  const tick = now => {
+    if (spawned < total && now - t0 > spawned * gap) spawn();
+    for (const it of live.slice()) {
+      const p = (now - it.born) / fallMs, y = -40 + p * (H() + 40);
+      it.el.style.top = y + "px";
+      it.el.classList.toggle("match", !!buf && it.answer.startsWith(buf));
+      if (p >= 1) { missed++; it.el.style.transition = "opacity .4s"; it.el.style.opacity = "0"; setTimeout(() => it.el.remove(), 400); live = live.filter(x => x !== it); }
+    }
+    if (spawned >= total && !live.length) return finish();
+    raf = requestAnimationFrame(tick);
+  };
+  raf = requestAnimationFrame(tick);
+  onCleanup(() => { ended = true; cancelAnimationFrame(raf); });
+  const setBuf = b => {
+    buf = b;
+    const hit = live.find(it => it.answer === buf);
+    if (hit) { caught++; hit.el.classList.add("pop"); setTimeout(() => hit.el.remove(), 300); live = live.filter(x => x !== hit); buf = ""; }
+    else if (buf && !live.some(it => it.answer.startsWith(buf))) { typed.classList.remove("shake"); void typed.offsetWidth; typed.classList.add("shake"); buf = ""; }
+    typed.textContent = buf || " ";
+  };
+  const finals = { "כ": "ך", "מ": "ם", "נ": "ן", "פ": "ף", "צ": "ץ" };
+  const add = ch => {
+    let b = buf + ch;
+    if (!live.some(it => it.answer.startsWith(b))) { const alt = buf + (finals[ch] || Object.keys(finals).find(k => finals[k] === ch) || ch); if (live.some(it => it.answer.startsWith(alt))) b = alt; }
+    setBuf(b);
+  };
+  const key = e => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.key === "Backspace") { e.preventDefault(); buf = buf.slice(0, -1); typed.textContent = buf || " "; return; }
+    if (e.key.length !== 1) return;
+    let ch = e.key.toLowerCase(); if (HEB_KEYS[ch]) ch = HEB_KEYS[ch];
+    if (/[א-ת0-9]/.test(ch)) { e.preventDefault(); add(ch); }
+  };
+  window.addEventListener("keydown", key); onCleanup(() => window.removeEventListener("keydown", key));
+  $$("[data-k]", box).forEach(b => b.onclick = () => { if (b.dataset.k === "back") { buf = buf.slice(0, -1); typed.textContent = buf || " "; } else add(b.dataset.k); });
+  typed.textContent = " ";
+}
+function viewTypingStation() {
+  let mode = "words", level = profileLevel();
+  const fake = { emoji: "🚀", type: "typing", title: "אותיות וחשבון" };
+  const render = () => {
+    runCleanup();
+    app.innerHTML = `${topbar()}<main class="wrap">
+      <div class="actHead"><span class="e" style="width:64px;height:64px;display:block">${STATION_ART.letters}</span><div><h1>אותיות וחשבון</h1><p class="muted small">משחק הקלדה בחלל</p></div></div>
+      ${STANDALONE ? `<div class="card" style="padding:8px;margin-bottom:14px"><iframe src="${LINKS.typing}" title="משחק ההקלדה בחלל" style="width:100%;height:min(78vh,640px);border:0;border-radius:12px;display:block" allow="fullscreen"></iframe></div><h2 style="margin:6px 0 10px">עוד תרגול קצר</h2>` : ""}
+      <div class="card stack">
+        <div class="modeTabs">${[["words", "מילים"], ["letters", "אותיות"], ["math", "חשבון"]].map(([m, l]) => `<button class="chip" data-m="${m}" aria-pressed="${mode === m}">${l}</button>`).join("")}</div>
+        <div class="levels">${LEVELS.map(l => `<button class="lvl" data-lvl="${l.id}" aria-pressed="${level === l.id}"><b>${l.name}</b><small>גילאי ${l.ages}</small></button>`).join("")}</div>
+        <div style="text-align:center"><button class="btn primary" id="start">להתחיל</button></div>
+      </div>
+      <div class="play" id="play" style="margin-top:14px;display:none"></div>
+      <div class="card" style="margin-top:16px;display:${STANDALONE ? "none" : "flex"};gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+        <span>יש גם משחק חלל מלא עם שלבים</span><a class="btn small" href="${LINKS.typing}" target="_blank" rel="noopener">למשחק החלל המלא ↗</a>
+      </div></main>`;
+    bindTop();
+    $$("[data-m]").forEach(b => b.onclick = () => { mode = b.dataset.m; render(); });
+    $$("[data-lvl]").forEach(b => b.onclick = () => { level = +b.dataset.lvl; render(); });
+    $("#start").onclick = () => {
+      const box = $("#play"); box.style.display = "block"; box.scrollIntoView({ behavior: "smooth", block: "center" });
+      typingGame(box, { mode, level }, r => celebrateStation(r));
+    };
+  };
+  const celebrateStation = r => {
+    const ov = document.createElement("div"); ov.className = "overlay";
+    ov.innerHTML = `<div class="celebrate"><div style="font-size:3rem">🚀</div><h2>סיימת</h2><p class="muted">תפסת ${r.caught} מתוך ${r.total}</p><div class="acts"><button class="btn primary" data-c="again">לשחק שוב</button><a class="btn" href="#">חזרה לשביל</a></div></div>`;
+    document.body.appendChild(ov); onCleanup(() => ov.remove());
+    ov.querySelector("[data-c=again]").onclick = () => { ov.remove(); render(); $("#start").click(); };
+    ov.querySelector("a").onclick = () => ov.remove();
+  };
+  render();
+}
+
+/* ---------- print ---------- */
+async function viewPrint(id) {
+  const a = await getActivity(id);
+  if (!a) { removeRecent(id); location.hash = ""; return; }
+  let mode = "color";
+  const render = () => {
+    app.innerHTML = `<div class="printPage">
+      <div class="printBar">
+        <a class="btn small" href="#activity-${a.id}">→ חזרה</a>
+        <button class="btn primary" id="pr" style="padding:9px 22px;font-size:1rem">להדפיס</button>
+        <button class="btn small" id="md">${mode === "color" ? "לעבור לשחור־לבן" : "לעבור לצבע"}</button>
+        <button class="btn small" id="png">💾 לשמור כתמונה</button>
+      </div>
+      <div class="sheet" id="sheet">${sheetSVG(a, mode)}</div>
+    </div>`;
+    $("#md").onclick = () => { mode = mode === "color" ? "bw" : "color"; render(); };
+    $("#pr").onclick = () => {
+      let ok = true; try { window.print(); } catch (e) { ok = false; }
+      if (!STANDALONE || !ok) setTimeout(() => toast("אם חלון ההדפסה לא נפתח כאן, שמרו כתמונה והדפיסו אותה"), ok ? 600 : 0);
+    };
+    $("#png").onclick = async () => {
+      try { const b = await svgToPngBlob(sheetSVG(a, mode, true), 2000, 2828); offerDownload(b, `${a.title} - דף פעילות.png`); }
+      catch (e) { toast("לא הצלחנו להכין תמונה, אפשר לנסות שוב"); }
+    };
+  };
+  render();
+}
+
+/* ---------- parents & worlds ---------- */
+function viewParents() {
+  let level = profileLevel(), cat = null, topic = "";
+  const render = () => {
+    app.innerHTML = `${topbar()}<main class="wrap stack">
+      <div><h1>אזור להורים</h1><p class="muted">בוחרים רמה, עולם ונושא, ויוצרים דף לילד או לילדה. כל דף אפשר לשחק על המסך או להדפיס ב־A4.</p></div>
+      <section class="card stack"><h3>רמת גיל</h3>
+        <div class="levels">${LEVELS.map(l => `<button class="lvl" data-lvl="${l.id}" aria-pressed="${level === l.id}"><b>${l.name}</b><small>גילאי ${l.ages}</small></button>`).join("")}</div></section>
+      <section class="stack"><h3>עולמות התוכן</h3>
+        <div class="worlds">${Object.entries(WORLDS).map(([k, w]) => `<a class="world" href="#world-${k}"><span style="font-size:1.6rem" aria-hidden="true">${w.e}</span><b>${w.name}</b><small>${w.d}</small></a>`).join("")}</div></section>
+      <section class="card stack"><h3>נושא</h3>
+        <div class="cats">${CATEGORIES.map((c, i) => `<button class="cat" data-cat="${i}" aria-pressed="${cat === i}"><span class="e" aria-hidden="true">${c.e}</span>${c.n}</button>`).join("")}</div>
+        ${cat !== null ? `<div class="chips">${CATEGORIES[cat].t.map(t => `<button class="chip" data-t="${esc(t)}" aria-pressed="${topic === t}">${esc(t)}</button>`).join("")}</div>` : ""}
+        <div><label class="lbl" for="free">או רעיון חופשי</label><input id="free" class="field" maxlength="60" placeholder="למשל: ג׳ירפה שמנגנת בגיטרה" value="${esc(topic)}"></div>
+      </section>
+      <div style="text-align:center"><button class="btn primary" id="go" ${topic.trim() ? "" : "disabled"}>ליצור פעילות</button></div>
+    </main>`;
+    bindTop();
+    $$("[data-lvl]").forEach(b => b.onclick = () => { level = +b.dataset.lvl; render(); });
+    $$("[data-cat]").forEach(b => b.onclick = () => { cat = +b.dataset.cat; topic = CATEGORIES[cat].t[0]; render(); });
+    $$("[data-t]").forEach(b => b.onclick = () => { topic = b.dataset.t; render(); });
+    $("#free").oninput = e => { topic = e.target.value; $("#go").disabled = !topic.trim(); };
+    $("#go").onclick = () => startCreate({ topic: topic.trim(), level, category: cat !== null ? CATEGORIES[cat].n : null });
+  };
+  render();
+}
+function viewWorld(wid) {
+  const w = WORLDS[wid]; if (!w) { location.hash = "parents"; return; }
+  app.innerHTML = `${topbar()}<main class="wrap stack">
+    <a class="back" href="#parents">→ לאזור ההורים</a>
+    <div><h1>${w.e} עולם ה${w.name}</h1><p class="muted">${w.d}</p></div>
+    <div class="types">${w.types.map(id => { const t = TYPES.find(x => x.id === id); return `<button class="typeCard" data-type="${id}">${TYPE_ICON[id]}<b>${t.name}</b><small>${t.d}</small></button>`; }).join("")}</div>
+    <div style="text-align:center"><button class="btn primary" id="go">לבחור נושא ולהתחיל</button></div>
+  </main>`;
+  bindTop();
+  $$("[data-type]").forEach(b => b.onclick = () => startCreate({ world: wid, type: b.dataset.type }));
+  $("#go").onclick = () => startCreate({ world: wid });
+}
+
+route();
+
+</script>
+</body>
+</html>
